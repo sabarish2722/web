@@ -182,3 +182,5 @@ export async function uploadResume(formData: FormData) {
       return { success: false, error: `Upload failed: ${errorMessage}` };
     }
   }
+
+    
