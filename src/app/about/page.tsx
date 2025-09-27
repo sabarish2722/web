@@ -26,16 +26,21 @@ async function getTeamMembers() {
         return fallbackData;
     }
 
-    const { data, error } = await supabaseAdmin
-        .from('team_members')
-        .select('*')
-        .order('sort_order', { ascending: true });
+    try {
+        const { data, error } = await supabaseAdmin
+            .from('team_members')
+            .select('*')
+            .order('sort_order', { ascending: true });
 
-    if (error) {
-        console.error('Error fetching team members:', error.message);
+        if (error) {
+            console.error('Error fetching team members:', error.message);
+            return fallbackData;
+        }
+        return data;
+    } catch (e) {
+        console.error('An unexpected error occurred while fetching team members:', e);
         return fallbackData;
     }
-    return data;
 }
 
 export default async function AboutPage() {

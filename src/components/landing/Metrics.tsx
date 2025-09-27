@@ -19,16 +19,21 @@ async function getMetrics() {
         return fallbackData;
     }
     
-    const { data, error } = await supabaseAdmin
-        .from('metrics')
-        .select('*')
-        .order('sort_order', { ascending: true });
+    try {
+        const { data, error } = await supabaseAdmin
+            .from('metrics')
+            .select('*')
+            .order('sort_order', { ascending: true });
 
-    if (error) {
-        console.error("Error fetching metrics:", error.message);
+        if (error) {
+            console.error("Error fetching metrics:", error.message);
+            return fallbackData;
+        }
+        return data;
+    } catch(e) {
+        console.error('An unexpected error occurred while fetching metrics:', e);
         return fallbackData;
     }
-    return data;
 }
 
 export default async function Metrics() {
