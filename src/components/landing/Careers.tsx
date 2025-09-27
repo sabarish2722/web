@@ -34,6 +34,7 @@ export default function Careers() {
   const [isPending, startTransition] = useTransition();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -61,8 +62,7 @@ export default function Careers() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("resume", selectedFile);
+    const formData = new FormData(event.currentTarget);
 
     startTransition(async () => {
       const result = await uploadResume(formData);
@@ -73,9 +73,7 @@ export default function Careers() {
           description: result.message,
         });
         setSelectedFile(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
+        formRef.current?.reset();
       } else {
         toast({
           title: "Upload Failed",
@@ -106,7 +104,15 @@ export default function Careers() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="name">Full Name</Label>
+                <Input id="name" name="name" type="text" required className="mt-2" />
+              </div>
+               <div>
+                <Label htmlFor="mobile">Mobile Number (Optional)</Label>
+                <Input id="mobile" name="mobile" type="tel" className="mt-2" />
+              </div>
               <div>
                 <Label htmlFor="resume">
                   Resume (PDF, DOC, DOCX - Max 5MB)
@@ -114,11 +120,13 @@ export default function Careers() {
                 <div className="flex items-center gap-2 mt-2">
                   <Input
                     id="resume"
+                    name="resume"
                     type="file"
                     ref={fileInputRef}
                     accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     onChange={handleFileChange}
                     className="flex-grow"
+                    required
                   />
                 </div>
                 {selectedFile && (

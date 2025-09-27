@@ -1,15 +1,17 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { uploadResume } from '@/app/actions';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/components/ui/use-toast";
+import { Label } from '../ui/label';
 
 const ResumeUploadForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,7 +25,7 @@ const ResumeUploadForm = () => {
           title: "Success!",
           description: response.message,
         });
-        event.currentTarget.reset();
+        formRef.current?.reset();
       } else {
         toast({
           title: "Error",
@@ -43,22 +45,22 @@ const ResumeUploadForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-300">Full Name</label>
+        <Label htmlFor="name" className="block text-sm font-medium text-gray-300">Full Name</Label>
         <Input type="text" id="name" name="name" required className="mt-1 block w-full" />
       </div>
       <div>
-        <label htmlFor="mobile" className="block text-sm font-medium text-gray-300">Mobile Number (Optional)</label>
+        <Label htmlFor="mobile" className="block text-sm font-medium text-gray-300">Mobile Number (Optional)</Label>
         <Input type="tel" id="mobile" name="mobile" className="mt-1 block w-full" />
       </div>
       <div>
-        <label htmlFor="resume" className="block text-sm font-medium text-gray-300">Upload Resume</label>
+        <Label htmlFor="resume" className="block text-sm font-medium text-gray-300">Upload Resume</Label>
         <Input type="file" id="resume" name="resume" required accept=".pdf,.doc,.docx" className="mt-1 block w-full" />
         <p className="mt-1 text-sm text-gray-500">PDF or Word document, up to 5MB.</p>
       </div>
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Submitting...' : 'Submit'}
+      <Button type="submit" disabled={isSubmitting} className="w-full">
+        {isSubmitting ? 'Submitting...' : 'Submit Application'}
       </Button>
     </form>
   );
