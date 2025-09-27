@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: "macs11 - Your City, Simplified",
   description:
     "India's hyperlocal platform for daily essentials, fitness, shopping, and tech services.",
 };
+
+const GA_MEASUREMENT_ID = "G-BY186VXK57";
 
 export default function RootLayout({
   children,
@@ -32,6 +35,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
+        {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
         {children}
         <Toaster />
       </body>
