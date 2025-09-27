@@ -2,7 +2,7 @@
 "use server";
 
 import { z } from "zod";
-import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 
 // This type needs to be defined, assuming it's a string for now.
 // You might need to adjust it based on what `generateWebsiteContent` expects.
@@ -60,7 +60,8 @@ export async function submitPartnerForm(data: unknown) {
     };
   } catch (error) {
     console.error("Error writing to Supabase: ", error);
-    return { success: false, error: "Failed to submit form. Please try again later." };
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+    return { success: false, error: `Failed to submit form: ${errorMessage}` };
   }
 }
 
@@ -93,7 +94,8 @@ export async function submitInvestorForm(data: unknown) {
     };
   } catch (error) {
     console.error("Error writing to Supabase: ", error);
-    return { success: false, error: "Failed to submit form. Please try again later." };
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+    return { success: false, error: `Failed to submit form: ${errorMessage}` };
   }
 }
 
@@ -126,7 +128,8 @@ export async function submitContactForm(data: unknown) {
     };
   } catch (error) {
     console.error("Error writing to Supabase: ", error);
-    return { success: false, error: "Failed to submit form. Please try again later." };
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+    return { success: false, error: `Failed to submit form: ${errorMessage}` };
   }
 }
 
@@ -240,3 +243,4 @@ export async function uploadResume(formData: FormData) {
       return { success: false, error: `Upload failed: ${errorMessage}` };
     }
   }
+
