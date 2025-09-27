@@ -171,3 +171,48 @@ export async function getVisitorCount() {
     return null;
   }
 }
+
+export async function uploadResume(formData: FormData) {
+    const file = formData.get("resume") as File | null;
+  
+    if (!file) {
+      return { success: false, error: "No resume file provided." };
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      return { success: false, error: "File is too large. Maximum size is 5MB." };
+    }
+  
+    const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"];
+    if (!allowedTypes.includes(file.type)) {
+      return { success: false, error: "Invalid file type. Please upload a PDF or Word document." };
+    }
+    
+    const filePath = `public/${Date.now()}-${file.name}`;
+  
+    try {
+      const { error: uploadError } = await supabase.storage
+        .from("resumes")
+        .upload(filePath, file);
+  
+      if (uploadError) {
+        throw uploadError;
+      }
+  
+      const { error: dbError } = await supabase.from("resumes").insert({
+        file_path: filePath,
+        original_filename: file.name,
+        file_size: file.size,
+      });
+  
+      if (dbError) {
+        throw dbError;
+      }
+  
+      return { success: true, message: "Resume uploaded successfully!" };
+    } catch (error) {
+      console.error("Error uploading resume:", error);
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+      return { success: false, error: `Upload failed: ${errorMessage}` };
+    }
+  }
