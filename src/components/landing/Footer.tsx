@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import { Twitter, Linkedin, Facebook, Mail, Phone } from "lucide-react";
+import { Twitter, Linkedin, Facebook, Mail, Phone, Info } from "lucide-react";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -52,6 +52,14 @@ export default function Footer() {
                 <span>8919702207</span>
              </a>
           </div>
+            <div className="mt-6 p-4 bg-accent/10 border-l-4 border-accent rounded-r-lg">
+                <div className="flex items-start gap-3">
+                    <Info className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                    <p className="text-accent-foreground/90">
+                        For any immediate concerns or to provide feedback, please do not hesitate to contact us. We are here to help!
+                    </p>
+                </div>
+            </div>
         </div>
       </div>
       <div className="container max-w-7xl mt-12 pt-8 border-t">
