@@ -4,6 +4,21 @@
 import { z } from "zod";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+<<<<<<< HEAD
+=======
+
+export async function handleGenerateContent(input: GenerateWebsiteContentInput) {
+  try {
+    const result = await generateWebsiteContent(input);
+    return { success: true, data: result };
+  } catch (error) {
+    console.error(error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred.";
+    return { success: false, error: `Failed to generate content: ${errorMessage}` };
+  }
+}
+>>>>>>> 19f9702 (if investor or gives details where ot will store)
 
 const partnerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -33,7 +48,38 @@ export async function submitPartnerForm(data: unknown) {
   } catch (error) {
     console.error("Error writing to Firestore: ", error);
     return { success: false, error: "Failed to submit form. Please try again later." };
+<<<<<<< HEAD
   }
+=======
+  }
+}
+
+const investorSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters."),
+  company: z.string().min(2, "Company name is required."),
+  email: z.string().email("Invalid email address."),
+});
+
+export async function submitInvestorForm(data: unknown) {
+  const result = investorSchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: "Invalid form data." };
+  }
+
+  try {
+    await addDoc(collection(db, "investors"), {
+      ...result.data,
+      submittedAt: serverTimestamp(),
+    });
+    return {
+      success: true,
+      message: "Thank you! You will receive the investor deck shortly.",
+    };
+  } catch (error) {
+    console.error("Error writing to Firestore: ", error);
+    return { success: false, error: "Failed to submit form. Please try again later." };
+  }
+>>>>>>> 19f9702 (if investor or gives details where ot will store)
 }
 
 const contactSchema = z.object({
