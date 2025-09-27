@@ -79,17 +79,15 @@ export async function submitInvestorForm(data: unknown) {
   }
 }
 
-const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  email: z.string().email("Invalid email address."),
-  message: z.string().min(10, "Message must be at least 10 characters."),
+const suggestionSchema = z.object({
+  suggestion: z.string().min(10, "Suggestion must be at least 10 characters."),
 });
 
-export async function submitContactForm(data: unknown) {
+export async function submitSuggestionForm(data: unknown) {
   try {
-    const result = contactSchema.safeParse(data);
+    const result = suggestionSchema.safeParse(data);
     if (!result.success) {
-      console.error("Contact form validation error:", result.error.flatten());
+      console.error("Suggestion form validation error:", result.error.flatten());
       return { success: false, error: "Invalid form data. Please check your entries." };
     }
 
@@ -97,19 +95,19 @@ export async function submitContactForm(data: unknown) {
       return { success: false, error: "Backend not configured correctly. Please contact support." };
     }
     
-    const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
+    const { error } = await supabaseAdmin.from("suggestions").insert([result.data]);
 
     if (error) {
-        console.error("Error writing to Supabase (contact): ", error);
+        console.error("Error writing to Supabase (suggestions): ", error);
         return { success: false, error: `Failed to submit form: ${error.message}` };
     }
     
     return {
       success: true,
-      message: "Your message has been sent! We will get back to you soon.",
+      message: "Your suggestion has been sent! Thank you for your feedback.",
     };
   } catch (e: any) {
-    console.error("Unexpected error in submitContactForm:", e);
+    console.error("Unexpected error in submitSuggestionForm:", e);
     return { success: false, error: `An unexpected error occurred: ${e.message}` };
   }
 }

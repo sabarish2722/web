@@ -1,7 +1,7 @@
 
 import Link from "next/link";
-import { Twitter, Linkedin, Facebook, Mail, Phone, Info } from "lucide-react";
-import ContactForm from "../forms/ContactForm";
+import { Twitter, Linkedin, Facebook, Mail, Phone, MessageSquarePlus } from "lucide-react";
+import SuggestionForm from "../forms/SuggestionForm";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -39,11 +39,12 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        <div className="p-6 bg-background rounded-lg shadow-lg">
-          <h3 className="text-2xl font-headline font-semibold mb-4">
-            Give us a Suggestion
+        <div className="p-6 bg-background rounded-lg shadow-lg border border-primary/20">
+          <h3 className="text-2xl font-headline font-semibold mb-4 flex items-center gap-3 text-primary">
+            <MessageSquarePlus />
+            Leave a Suggestion
           </h3>
-          <ContactForm />
+          <SuggestionForm />
         </div>
       </div>
       <div className="container max-w-7xl mt-12 pt-8 border-t">
