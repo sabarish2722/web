@@ -8,13 +8,15 @@ function isIconName(key: string): key is keyof typeof LucideIcons {
 }
 
 async function getMetrics() {
+    const fallbackData = [
+        { id: 1, icon_name: 'Users', value: "3+", label: "Local Partners" },
+        { id: 2, icon_name: 'CheckCircle', value: "4+", label: "Services Completed" },
+        { id: 3, icon_name: 'Star', value: "4.8", label: "Average Rating" },
+    ];
+
     if (!supabaseAdmin) {
-        console.error("Supabase admin client not initialized.");
-        return [
-            { id: 1, icon_name: 'Users', value: "3+", label: "Local Partners" },
-            { id: 2, icon_name: 'CheckCircle', value: "4+", label: "Services Completed" },
-            { id: 3, icon_name: 'Star', value: "4.8", label: "Average Rating" },
-        ];
+        console.error("Supabase admin client not initialized. Falling back to default metrics.");
+        return fallbackData;
     }
     
     const { data, error } = await supabaseAdmin
@@ -24,12 +26,7 @@ async function getMetrics() {
 
     if (error) {
         console.error("Error fetching metrics:", error);
-        // Fallback data
-        return [
-            { id: 1, icon_name: 'Users', value: "3+", label: "Local Partners" },
-            { id: 2, icon_name: 'CheckCircle', value: "4+", label: "Services Completed" },
-            { id: 3, icon_name: 'Star', value: "4.8", label: "Average Rating" },
-        ];
+        return fallbackData;
     }
     return data;
 }

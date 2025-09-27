@@ -13,6 +13,19 @@ const coreValues = [
 ];
 
 async function getTeamMembers() {
+    // Fallback data in case Supabase is not configured
+    const fallbackData = [
+        { id: 1, name: "sabarish marrigarlla", role: "CEO & Founder", image_url: "https://picsum.photos/seed/sabarishmarrigarlla/100/100", sort_order: 1 },
+        { id: 2, name: "Jane Smith", role: "Chief Technology Officer", image_url: "https://picsum.photos/seed/JaneSmith/100/100", sort_order: 2 },
+        { id: 3, name: "Peter Jones", role: "Head of Operations", image_url: "https://picsum.photos/seed/PeterJones/100/100", sort_order: 3 },
+        { id: 4, name: "Samantha Lee", role: "Lead Product Designer", image_url: "https://picsum.photos/seed/SamanthaLee/100/100", sort_order: 4 },
+    ];
+
+    if (!supabaseAdmin) {
+        console.error('Supabase admin client not initialized. Falling back to default team members.');
+        return fallbackData;
+    }
+
     const { data, error } = await supabaseAdmin
         .from('team_members')
         .select('*')
@@ -20,11 +33,7 @@ async function getTeamMembers() {
 
     if (error) {
         console.error('Error fetching team members:', error);
-        // Return a default team structure on error
-        return [
-            { id: 1, name: "sabarish marrigarlla", role: "CEO & Founder", image_url: "https://picsum.photos/seed/sabarishmarrigarlla/100/100", sort_order: 1 },
-            { id: 2, name: "Error Loading", role: "Team", image_url: "https://picsum.photos/seed/error/100/100", sort_order: 2 },
-        ];
+        return fallbackData;
     }
     return data;
 }
