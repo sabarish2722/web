@@ -2,13 +2,7 @@
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { CheckCircle } from "lucide-react";
-
-const teamMembers = [
-    { name: "John Doe", role: "CEO & Founder" },
-    { name: "Jane Smith", role: "Chief Technology Officer" },
-    { name: "Peter Jones", role: "Head of Operations" },
-    { name: "Samantha Lee", role: "Lead Product Designer" },
-];
+import { supabase } from "@/lib/supabase";
 
 const coreValues = [
     "Customer-Centricity",
@@ -18,12 +12,31 @@ const coreValues = [
     "Operational Excellence",
 ];
 
-export default function AboutPage() {
+async function getTeamMembers() {
+    const { data, error } = await supabase
+        .from('team_members')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching team members:', error);
+        // Return a default team structure on error
+        return [
+            { name: "sabarish marrigarlla", role: "CEO & Founder", image_url: "https://picsum.photos/seed/sabarishmarrigarlla/100/100" },
+            { name: "Error Loading", role: "Team", image_url: "https://picsum.photos/seed/error/100/100" },
+        ];
+    }
+    return data;
+}
+
+export default async function AboutPage() {
     const aboutImage = PlaceHolderImages.find((img) => img.id === "about-us-image") ?? {
         imageUrl: `https://picsum.photos/seed/aboutpage/1200/600`,
         description: "Placeholder for about us image",
         imageHint: "team collaboration"
     };
+
+    const teamMembers = await getTeamMembers();
 
     return (
         <main className="flex-1">
@@ -81,7 +94,7 @@ export default function AboutPage() {
                         {teamMembers.map((member) => (
                             <div key={member.name} className="text-center">
                                 <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
-                                  <Image src={`https://picsum.photos/seed/${member.name.replace(/\s/g, '')}/100/100`} alt={member.name} width={100} height={100} className="rounded-full" />
+                                  <Image src={member.image_url || `https://picsum.photos/seed/${member.name.replace(/\s/g, '')}/100/100`} alt={member.name} width={100} height={100} className="rounded-full" />
                                 </div>
                                 <h3 className="font-semibold">{member.name}</h3>
                                 <p className="text-sm text-muted-foreground">{member.role}</p>
