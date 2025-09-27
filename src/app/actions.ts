@@ -11,7 +11,8 @@ const partnerSchema = z.object({
   phone: z
     .string()
     .min(10, "Phone number must be at least 10 digits.")
-    .optional(),
+    .optional()
+    .or(z.literal('')),
 });
 
 export async function submitPartnerForm(data: unknown) {
@@ -28,7 +29,7 @@ export async function submitPartnerForm(data: unknown) {
     const { error } = await supabaseAdmin.from("partners").insert([result.data]);
 
     if (error) {
-      throw new Error(error.message);
+      throw error;
     }
     
     return {
@@ -36,9 +37,9 @@ export async function submitPartnerForm(data: unknown) {
       message: "Thank you for your interest! We will be in touch shortly.",
     };
   } catch (error) {
-    console.error("Error writing to Supabase: ", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
-    return { success: false, error: `Failed to submit form: ${errorMessage}` };
+    const supabaseError = error as any;
+    console.error("Error writing to Supabase: ", supabaseError);
+    return { success: false, error: `Failed to submit form: ${supabaseError.message}` };
   }
 }
 
@@ -62,7 +63,7 @@ export async function submitInvestorForm(data: unknown) {
     const { error } = await supabaseAdmin.from("investors").insert([result.data]);
 
     if (error) {
-      throw new Error(error.message);
+      throw error;
     }
 
     return {
@@ -70,9 +71,9 @@ export async function submitInvestorForm(data: unknown) {
       message: "Thank you! You will receive the investor deck shortly.",
     };
   } catch (error) {
-    console.error("Error writing to Supabase: ", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
-    return { success: false, error: `Failed to submit form: ${errorMessage}` };
+    const supabaseError = error as any;
+    console.error("Error writing to Supabase: ", supabaseError);
+    return { success: false, error: `Failed to submit form: ${supabaseError.message}` };
   }
 }
 
@@ -96,7 +97,7 @@ export async function submitContactForm(data: unknown) {
     const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
 
     if (error) {
-      throw new Error(error.message);
+      throw error;
     }
     
     return {
@@ -104,9 +105,9 @@ export async function submitContactForm(data: unknown) {
       message: "Your message has been sent! We will get back to you soon.",
     };
   } catch (error) {
-    console.error("Error writing to Supabase: ", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
-    return { success: false, error: `Failed to submit form: ${errorMessage}` };
+    const supabaseError = error as any;
+    console.error("Error writing to Supabase: ", supabaseError);
+    return { success: false, error: `Failed to submit form: ${supabaseError.message}` };
   }
 }
 
@@ -181,8 +182,9 @@ export async function uploadResume(formData: FormData) {
   
       return { success: true, message: "Resume uploaded successfully!" };
     } catch (error) {
-      console.error("Error uploading resume:", error);
-      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
-      return { success: false, error: `Upload failed: ${errorMessage}` };
+      const supabaseError = error as any;
+      console.error("Error uploading resume:", supabaseError);
+      return { success: false, error: `Upload failed: ${supabaseError.message}` };
     }
   }
+
