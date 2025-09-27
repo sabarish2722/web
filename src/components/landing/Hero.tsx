@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import MobileAppSimulator from "./MobileAppSimulator";
@@ -31,7 +32,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
         >
           <Button asChild size="lg">
-            <Link href="#">Download the App</Link>
+            <Link href="#">App Coming Soon</Link>
           </Button>
           <Button asChild size="lg" variant="ghost">
             <Link href="#partners">Partner With Us</Link>

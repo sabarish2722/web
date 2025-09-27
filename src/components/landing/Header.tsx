@@ -53,7 +53,7 @@ export default function Header() {
             <Link href="#partners">Partner With Us</Link>
           </Button>
           <Button className="hidden sm:flex" asChild>
-            <Link href="#download">Download the App</Link>
+            <Link href="#download">App Coming Soon</Link>
           </Button>
 
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -79,7 +79,7 @@ export default function Header() {
                 </nav>
                 <div className="mt-auto flex flex-col gap-4">
                     <Button asChild>
-                        <Link href="#download">Download the App</Link>
+                        <Link href="#download">App Coming Soon</Link>
                     </Button>
                     <Button variant="outline" asChild>
                         <Link href="#partners">Partner With Us</Link>
