@@ -1,22 +1,8 @@
 
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase";
 import { z } from "zod";
-
-// Re-initialize Supabase Admin Client directly in this file.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-const supabaseAdmin = supabaseUrl && supabaseServiceRoleKey 
-  ? createClient(supabaseUrl, supabaseServiceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    })
-  : null;
-
 
 const partnerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -33,7 +19,8 @@ export async function submitPartnerForm(data: unknown) {
   try {
     const result = partnerSchema.safeParse(data);
     if (!result.success) {
-      return { success: false, error: "Invalid form data." };
+      console.error("Partner form validation error:", result.error.flatten());
+      return { success: false, error: "Invalid form data. Please check your entries." };
     }
 
     if (!supabaseAdmin) {
@@ -53,7 +40,7 @@ export async function submitPartnerForm(data: unknown) {
     };
   } catch(e: any) {
     console.error("Caught exception in submitPartnerForm: ", e);
-    return { success: false, error: e.message };
+    return { success: false, error: "An unexpected server error occurred." };
   }
 }
 
@@ -67,7 +54,8 @@ export async function submitInvestorForm(data: unknown) {
   try {
     const result = investorSchema.safeParse(data);
     if (!result.success) {
-      return { success: false, error: "Invalid form data." };
+      console.error("Investor form validation error:", result.error.flatten());
+      return { success: false, error: "Invalid form data. Please check your entries." };
     }
     
     if (!supabaseAdmin) {
@@ -87,7 +75,7 @@ export async function submitInvestorForm(data: unknown) {
     };
   } catch(e: any) {
     console.error("Caught exception in submitInvestorForm: ", e);
-    return { success: false, error: e.message };
+    return { success: false, error: "An unexpected server error occurred." };
   }
 }
 
@@ -101,7 +89,8 @@ export async function submitContactForm(data: unknown) {
   try {
     const result = contactSchema.safeParse(data);
     if (!result.success) {
-      return { success: false, error: "Invalid form data." };
+      console.error("Contact form validation error:", result.error.flatten());
+      return { success: false, error: "Invalid form data. Please check your entries." };
     }
 
     if (!supabaseAdmin) {
@@ -121,7 +110,7 @@ export async function submitContactForm(data: unknown) {
     };
   } catch(e: any) {
     console.error("Caught exception in submitContactForm: ", e);
-    return { success: false, error: e.message };
+    return { success: false, error: "An unexpected server error occurred." };
   }
 }
 
