@@ -2,7 +2,7 @@
 "use server";
 
 import { z } from "zod";
-import { supabase } from "@/lib/supabase";
+import { supabase, supabaseAdmin } from "@/lib/supabase";
 
 // This type needs to be defined, assuming it's a string for now.
 // You might need to adjust it based on what `generateWebsiteContent` expects.
@@ -175,6 +175,9 @@ export async function getVisitorCount() {
 }
 
 export async function uploadResume(formData: FormData) {
+    if (!supabaseAdmin) {
+        return { success: false, error: "Supabase admin client is not initialized. Check server environment variables." };
+    }
     const file = formData.get("resume") as File | null;
   
     if (!file) {
@@ -193,7 +196,7 @@ export async function uploadResume(formData: FormData) {
     const filePath = `public/${Date.now()}-${file.name}`;
   
     try {
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabaseAdmin.storage
         .from("resumes")
         .upload(filePath, file);
   
@@ -201,13 +204,15 @@ export async function uploadResume(formData: FormData) {
         throw uploadError;
       }
   
-      const { error: dbError } = await supabase.from("resumes").insert({
+      const { error: dbError } = await supabaseAdmin.from("resumes").insert({
         file_path: filePath,
         original_filename: file.name,
         file_size: file.size,
       });
   
       if (dbError) {
+        // If the database insert fails, we should try to delete the uploaded file.
+        await supabaseAdmin.storage.from("resumes").remove([filePath]);
         throw dbError;
       }
   
@@ -220,3 +225,4 @@ export async function uploadResume(formData: FormData) {
   }
 
     
+
