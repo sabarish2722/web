@@ -32,7 +32,7 @@ async function getTeamMembers() {
         .order('sort_order', { ascending: true });
 
     if (error) {
-        console.error('Error fetching team members:', error);
+        console.error('Error fetching team members:', error.message);
         return fallbackData;
     }
     return data;

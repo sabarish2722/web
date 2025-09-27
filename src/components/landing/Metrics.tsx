@@ -25,7 +25,7 @@ async function getMetrics() {
         .order('sort_order', { ascending: true });
 
     if (error) {
-        console.error("Error fetching metrics:", error);
+        console.error("Error fetching metrics:", error.message);
         return fallbackData;
     }
     return data;
