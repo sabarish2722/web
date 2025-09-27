@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { submitPartnerForm } from "@/app/actions";
-import { useState } from "react";
+import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
@@ -34,7 +34,7 @@ const formSchema = z.object({
 
 export default function PartnerForm() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,24 +46,23 @@ export default function PartnerForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    const result = await submitPartnerForm(values);
-    setIsSubmitting(false);
-
-    if (result.success) {
-      toast({
-        title: "Submission Successful!",
-        description: result.message,
-      });
-      form.reset();
-    } else {
-      toast({
-        title: "Submission Failed",
-        description: result.error,
-        variant: "destructive",
-      });
-    }
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    startTransition(async () => {
+      const result = await submitPartnerForm(values);
+      if (result.success) {
+        toast({
+          title: "Submission Successful!",
+          description: result.message,
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Submission Failed",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
+    });
   }
 
   return (
@@ -129,8 +128,8 @@ export default function PartnerForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Partner With Us
             </Button>
           </form>

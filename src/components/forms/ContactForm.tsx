@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitContactForm } from "@/app/actions";
-import { useState } from "react";
+import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
@@ -26,7 +26,7 @@ const formSchema = z.object({
 
 export default function ContactForm() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,23 +38,23 @@ export default function ContactForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    const result = await submitContactForm(values);
-    setIsSubmitting(false);
+    startTransition(async () => {
+      const result = await submitContactForm(values);
 
-    if (result.success) {
-      toast({
-        title: "Message Sent!",
-        description: result.message,
-      });
-      form.reset();
-    } else {
-      toast({
-        title: "Submission Failed",
-        description: result.error,
-        variant: "destructive",
-      });
-    }
+      if (result.success) {
+        toast({
+          title: "Message Sent!",
+          description: result.message,
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Submission Failed",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
+    });
   }
 
   return (
@@ -98,8 +98,8 @@ export default function ContactForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full sm:w-auto" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Send Message
         </Button>
       </form>

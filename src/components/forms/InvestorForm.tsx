@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
@@ -32,7 +32,7 @@ const formSchema = z.object({
 
 export default function InvestorForm() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,25 +44,25 @@ export default function InvestorForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    // const result = await submitInvestorForm(values);
-    console.log("Investor form submission is disabled.");
-    const result = { success: false, error: "This form is not active." };
-    setIsSubmitting(false);
+    startTransition(() => {
+      // const result = await submitInvestorForm(values);
+      console.log("Investor form submission is disabled.");
+      const result = { success: false, error: "This form is not active." };
 
-    if (result.success) {
-      toast({
-        title: "Request Sent!",
-        description: "Thank you for your interest!",
-      });
-      form.reset();
-    } else {
-      toast({
-        title: "Request Failed",
-        description: result.error,
-        variant: "destructive",
-      });
-    }
+      if (result.success) {
+        toast({
+          title: "Request Sent!",
+          description: "Thank you for your interest!",
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Request Failed",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
+    });
   }
 
   return (
@@ -120,9 +120,9 @@ export default function InvestorForm() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Request Deck
             </Button>
           </form>

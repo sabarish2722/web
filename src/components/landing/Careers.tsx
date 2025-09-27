@@ -8,13 +8,13 @@ import { Loader2, Mail, Upload } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useState, useRef } from "react";
+import { useState, useRef, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { uploadResume } from "@/app/actions";
 
 export default function Careers() {
     const { toast } = useToast();
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isPending, startTransition] = useTransition();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,29 +36,29 @@ export default function Careers() {
             return;
         }
 
-        setIsSubmitting(true);
         const formData = new FormData();
         formData.append("resume", selectedFile);
+        
+        startTransition(async () => {
+            const result = await uploadResume(formData);
 
-        const result = await uploadResume(formData);
-        setIsSubmitting(false);
-
-        if (result.success) {
-            toast({
-                title: "Upload Successful!",
-                description: result.message,
-            });
-            setSelectedFile(null);
-            if(fileInputRef.current) {
-                fileInputRef.current.value = "";
+            if (result.success) {
+                toast({
+                    title: "Upload Successful!",
+                    description: result.message,
+                });
+                setSelectedFile(null);
+                if(fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
+            } else {
+                toast({
+                    title: "Upload Failed",
+                    description: result.error,
+                    variant: "destructive",
+                });
             }
-        } else {
-            toast({
-                title: "Upload Failed",
-                description: result.error,
-                variant: "destructive",
-            });
-        }
+        });
     };
 
     return (
@@ -92,9 +92,9 @@ export default function Careers() {
                                 </div>
                                 {selectedFile && <p className="text-sm text-muted-foreground mt-2">Selected: {selectedFile.name}</p>}
                             </div>
-                             <Button type="submit" className="w-full" disabled={isSubmitting}>
-                                {isSubmitting ? <Loader2 className="animate-spin" /> : <Upload />}
-                                {isSubmitting ? "Uploading..." : "Upload Resume"}
+                             <Button type="submit" className="w-full" disabled={isPending}>
+                                {isPending ? <Loader2 className="animate-spin" /> : <Upload />}
+                                {isPending ? "Uploading..." : "Upload Resume"}
                             </Button>
                         </form>
                         <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
