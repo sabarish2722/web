@@ -17,8 +17,8 @@ const navLinks = [
 
 const Logo = () => (
   <div className="flex items-center text-3xl font-bold font-headline">
-    <span className="text-[#F94D1D]">macs</span>
-    <span className="text-[#2622E7]">11</span>
+    <span className="text-primary">macs</span>
+    <span className="text-accent">11</span>
   </div>
 );
 
