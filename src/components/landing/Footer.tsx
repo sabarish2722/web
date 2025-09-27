@@ -83,7 +83,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} macs11. All rights reserved.</p>
           <div className="flex gap-4 mt-4 sm:mt-0">
-            <Link href="#" className="hover:text-foreground">
+            <Link href="/about" className="hover:text-foreground">
               About Us
             </Link>
             <Link href="#careers" className="hover:text-foreground">
