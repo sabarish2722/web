@@ -9,7 +9,7 @@
     {
       "id": "partner-image",
       "description": "An image of a smiling local business owner in their shop.",
-      "imageUrl": "https://images.unsplash.com/photo-1556741533-6e6a62bd8b49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxsb2NhbCUyMGJ1c2luZXNzfGVufDB8fHx8MTc1ODk0MzkwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1556741533-6e6a62bd8b49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxsb2NhbCUyMGJ1c2luZXNzfGVufDB8fHx8fDE3NTg5NDMzkwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "local business"
     },
     {
@@ -23,6 +23,12 @@
       "description": "A diverse team collaborating in a modern office space.",
       "imageUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx0ZWFtJTIwY29sbGFib3JhdGlvbnxlbnwwfHx8fDE3NTg5MDg0Mzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "team collaboration"
+    },
+    {
+      "id": "careers-image",
+      "description": "An image representing career opportunities and recruitment.",
+      "imageUrl": "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZWNydWl0bWVudHxlbnwwfHx8fDE3NTk1NjA5MDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "job recruitment"
     }
   ]
 }
