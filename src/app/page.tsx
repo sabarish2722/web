@@ -1,6 +1,5 @@
 
 import Careers from "@/components/landing/Careers";
-import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
 import Hero from "@/components/landing/Hero";
 import Investors from "@/components/landing/Investors";
@@ -22,7 +21,6 @@ export default function Home() {
         <Investors />
         <Careers />
       </main>
-      <Footer />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Twitter, Linkedin, Facebook, Mail, Phone, MessageSquarePlus } from "lucide-react";
 import SuggestionForm from "../forms/SuggestionForm";
+import VisitorCounter from "../visitor-counter";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -18,7 +19,7 @@ const Logo = () => (
 export default function Footer() {
   return (
     <footer id="contact" className="py-20 bg-card border-t">
-      <div className="container max-w-7xl grid lg:grid-cols-2 gap-12">
+      <div className="container max-w-7xl grid lg:grid-cols-3 gap-12">
         <div className="flex flex-col gap-4">
           <Link href="/" className="flex items-center gap-2 w-fit">
             <Logo />
@@ -45,6 +46,18 @@ export default function Footer() {
             Leave a Suggestion
           </h3>
           <SuggestionForm />
+        </div>
+         <div className="flex flex-col gap-4">
+          <h3 className="text-2xl font-headline font-semibold text-primary">Get in Touch</h3>
+           <div className="p-4 rounded-lg border bg-background text-center">
+            <p className="text-lg font-semibold text-foreground">
+              Your feedback drives our progress.
+            </p>
+            <p className="text-muted-foreground mt-1">Let us know what you think!</p>
+          </div>
+           <div className="mt-4">
+              <VisitorCounter />
+            </div>
         </div>
       </div>
       <div className="container max-w-7xl mt-12 pt-8 border-t">
