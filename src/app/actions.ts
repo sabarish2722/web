@@ -1,8 +1,22 @@
 
 "use server";
 
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
-import { supabaseAdmin } from "@/lib/supabase";
+
+// Re-initialize Supabase Admin Client directly in this file.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const supabaseAdmin = supabaseUrl && supabaseServiceRoleKey 
+  ? createClient(supabaseUrl, supabaseServiceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    })
+  : null;
+
 
 const partnerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -100,29 +114,31 @@ export async function submitContactForm(data: unknown) {
 
 
 export async function getVisitorCount() {
-  if (!supabaseAdmin) {
-    console.error("Supabase admin client not initialized. Cannot fetch visitor count.");
-    return 0;
-  }
-  try {
-    const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
-
-    if (error) {
-      console.error("Error calling RPC to increment visitor count:", error.message);
+    if (!supabaseAdmin) {
+      console.error("Supabase admin client not initialized. Cannot fetch visitor count.");
       return 0;
     }
-
-    return data ?? 0;
-
-  } catch (error) {
-    if (error instanceof TypeError && error.message.includes('fetch failed')) {
-      console.error("Network error: Failed to connect to Supabase to get visitor count. Please check server connectivity.", error);
-    } else {
-      console.error("An unexpected error occurred in getVisitorCount:", error);
+    try {
+      // The RPC function 'increment_visitor_count' is created by the SQL script.
+      const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
+  
+      if (error) {
+        console.error("Error calling RPC to increment visitor count:", error.message);
+        return 0; // Gracefully fail
+      }
+  
+      return data ?? 0;
+  
+    } catch (error) {
+      // This catches network errors if the server can't reach Supabase at all.
+      if (error instanceof TypeError && error.message.includes('fetch failed')) {
+        console.error("Network error: Failed to connect to Supabase to get visitor count. Please check server connectivity.", error);
+      } else {
+        console.error("An unexpected error occurred in getVisitorCount:", error);
+      }
+      return 0; // Gracefully fail
     }
-    return 0;
   }
-}
 
 export async function uploadResume(formData: FormData) {
     if (!supabaseAdmin) {
