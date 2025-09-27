@@ -117,3 +117,21 @@ export async function submitContactForm(data: unknown) {
     return { success: false, error: "Failed to submit form. Please try again later." };
   }
 }
+
+
+export async function getVisitorCount() {
+  try {
+    const { data, error } = await supabase.rpc('increment_visitor_count');
+    
+    if (error) {
+      console.error("Error fetching visitor count:", error.message);
+      // Return a fallback or handle the error as needed
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("An unexpected error occurred:", error);
+    return null;
+  }
+}
