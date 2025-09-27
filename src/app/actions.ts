@@ -216,14 +216,12 @@ export async function uploadResume(formData: FormData) {
 
 export async function getAndIncrementVisitorCount(): Promise<number> {
   if (!supabaseAdmin) {
-    console.error('Supabase client not initialized');
-    // Return a default or error value
+    console.error('Supabase admin client not initialized. Cannot increment visitor count.');
     return -1;
   }
   const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
   if (error) {
     console.error('Error incrementing visitor count:', error);
-    // Return a default or error value
     return -1;
   }
   return data;

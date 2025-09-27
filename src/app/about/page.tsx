@@ -22,7 +22,7 @@ async function getTeamMembers() {
     ];
 
     if (!supabaseAdmin) {
-        console.error('Supabase admin client not initialized. Falling back to default team members.');
+        console.warn('Supabase admin client not initialized. Falling back to default team members. Please check server environment variables.');
         return fallbackData;
     }
 

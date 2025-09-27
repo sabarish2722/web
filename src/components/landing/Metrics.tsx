@@ -15,7 +15,7 @@ async function getMetrics() {
     ];
 
     if (!supabaseAdmin) {
-        console.error("Supabase admin client not initialized. Falling back to default metrics.");
+        console.warn("Supabase admin client not initialized. Falling back to default metrics. Please check server environment variables.");
         return fallbackData;
     }
     
