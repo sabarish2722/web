@@ -1,6 +1,6 @@
 
 import * as LucideIcons from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 
 // A type guard to check if a key is a valid icon name
 function isIconName(key: string): key is keyof typeof LucideIcons {
@@ -8,7 +8,16 @@ function isIconName(key: string): key is keyof typeof LucideIcons {
 }
 
 async function getMetrics() {
-    const { data, error } = await supabase
+    if (!supabaseAdmin) {
+        console.error("Supabase admin client not initialized.");
+        return [
+            { id: 1, icon_name: 'Users', value: "3+", label: "Local Partners" },
+            { id: 2, icon_name: 'CheckCircle', value: "4+", label: "Services Completed" },
+            { id: 3, icon_name: 'Star', value: "4.8", label: "Average Rating" },
+        ];
+    }
+    
+    const { data, error } = await supabaseAdmin
         .from('metrics')
         .select('*')
         .order('sort_order', { ascending: true });
@@ -17,9 +26,9 @@ async function getMetrics() {
         console.error("Error fetching metrics:", error);
         // Fallback data
         return [
-            { icon_name: 'Users', value: "3+", label: "Local Partners" },
-            { icon_name: 'CheckCircle', value: "4+", label: "Services Completed" },
-            { icon_name: 'Star', value: "4.8", label: "Average Rating" },
+            { id: 1, icon_name: 'Users', value: "3+", label: "Local Partners" },
+            { id: 2, icon_name: 'CheckCircle', value: "4+", label: "Services Completed" },
+            { id: 3, icon_name: 'Star', value: "4.8", label: "Average Rating" },
         ];
     }
     return data;
@@ -47,7 +56,7 @@ export default async function Metrics() {
                             : LucideIcons.AlertCircle; // Fallback icon
 
                         return (
-                            <div key={metric.label} className="flex flex-col items-center">
+                            <div key={metric.id} className="flex flex-col items-center">
                                 <IconComponent className="w-12 h-12 text-primary mb-4" />
                                 <p className="text-5xl font-bold font-headline">
                                     {metric.value}

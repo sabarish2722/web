@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { CheckCircle } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 
 const coreValues = [
     "Customer-Centricity",
@@ -13,7 +13,7 @@ const coreValues = [
 ];
 
 async function getTeamMembers() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
         .from('team_members')
         .select('*')
         .order('sort_order', { ascending: true });
@@ -22,8 +22,8 @@ async function getTeamMembers() {
         console.error('Error fetching team members:', error);
         // Return a default team structure on error
         return [
-            { name: "sabarish marrigarlla", role: "CEO & Founder", image_url: "https://picsum.photos/seed/sabarishmarrigarlla/100/100" },
-            { name: "Error Loading", role: "Team", image_url: "https://picsum.photos/seed/error/100/100" },
+            { id: 1, name: "sabarish marrigarlla", role: "CEO & Founder", image_url: "https://picsum.photos/seed/sabarishmarrigarlla/100/100", sort_order: 1 },
+            { id: 2, name: "Error Loading", role: "Team", image_url: "https://picsum.photos/seed/error/100/100", sort_order: 2 },
         ];
     }
     return data;
@@ -92,7 +92,7 @@ export default async function AboutPage() {
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8">
                         {teamMembers.map((member) => (
-                            <div key={member.name} className="text-center">
+                            <div key={member.id} className="text-center">
                                 <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
                                   <Image src={member.image_url || `https://picsum.photos/seed/${member.name.replace(/\s/g, '')}/100/100`} alt={member.name} width={100} height={100} className="rounded-full" />
                                 </div>
