@@ -112,34 +112,6 @@ export async function submitContactForm(data: unknown) {
   };
 }
 
-
-export async function getVisitorCount() {
-    if (!supabaseAdmin) {
-      console.error("Supabase admin client not initialized. Cannot fetch visitor count.");
-      return 0;
-    }
-    try {
-      // The RPC function 'increment_visitor_count' is created by the SQL script.
-      const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
-  
-      if (error) {
-        console.error("Error calling RPC to increment visitor count:", error.message);
-        return 0; // Gracefully fail
-      }
-  
-      return data ?? 0;
-  
-    } catch (error) {
-      // This catches network errors if the server can't reach Supabase at all.
-      if (error instanceof TypeError && error.message.includes('fetch failed')) {
-        console.error("Network error: Failed to connect to Supabase to get visitor count. Please check server connectivity.", error);
-      } else {
-        console.error("An unexpected error occurred in getVisitorCount:", error);
-      }
-      return 0; // Gracefully fail
-    }
-  }
-
 export async function uploadResume(formData: FormData) {
     if (!supabaseAdmin) {
         return { success: false, error: "Supabase admin client is not initialized. Check server environment variables." };

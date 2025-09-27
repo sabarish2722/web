@@ -1,8 +1,7 @@
 
 import Link from "next/link";
-import { Twitter, Linkedin, Facebook, Mail, Phone, Globe, Users } from "lucide-react";
+import { Twitter, Linkedin, Facebook, Mail, Phone, Globe } from "lucide-react";
 import ContactForm from "../forms/ContactForm";
-import { getVisitorCount } from "@/app/actions";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -15,23 +14,6 @@ const Logo = () => (
       <span className="text-primary">Macs</span><span className="text-accent">11</span>
     </div>
   );
-
-  async function VisitorCounter() {
-    const count = await getVisitorCount();
-  
-    return (
-      <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4">
-        <Users className="w-5 h-5" />
-        {typeof count === 'number' ? (
-          <span>
-            <span className="font-bold">{count.toLocaleString()}</span> Total Visitors
-          </span>
-        ) : (
-          <span>Visitor count unavailable</span>
-        )}
-      </div>
-    );
-  }
 
 export default function Footer() {
   return (
@@ -71,7 +53,6 @@ export default function Footer() {
               </a>
             ))}
           </div>
-          <VisitorCounter />
         </div>
         <div className="lg:col-span-2">
           <h3 className="text-2xl font-headline font-semibold mb-4">
