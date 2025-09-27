@@ -120,57 +120,23 @@ export async function submitContactForm(data: unknown) {
 
 
 export async function getVisitorCount() {
-  try {
-    // There's a race condition here, but for a simple visitor counter, it's acceptable.
-    // For a critical counter, a database transaction or a more robust RPC function would be better.
-
-    // 1. Fetch the current count
-    let { data: selectData, error: selectError } = await supabase
-      .from('counters')
-      .select('value')
-      .eq('name', 'visitors')
-      .single();
-
-    if (selectError) {
-      // If the row doesn't exist, create it.
-      if (selectError.code === 'PGRST116') {
-        const { data: insertData, error: insertError } = await supabase
-          .from('counters')
-          .insert({ name: 'visitors', value: 1 })
-          .select('value')
-          .single();
-
-        if (insertError) {
-          console.error("Error inserting initial visitor count:", insertError.message);
-          return null;
-        }
-        return insertData?.value ?? 1;
+    try {
+      // This RPC call will safely increment the counter and return the new value.
+      const { data, error } = await supabase.rpc('increment_visitor_count');
+  
+      if (error) {
+        // This will now properly log if the function is missing, etc.
+        console.error("Error fetching visitor count:", error.message);
+        return null;
       }
-      console.error("Error fetching visitor count:", selectError.message);
+  
+      return data;
+  
+    } catch (error) {
+      console.error("An unexpected error occurred in getVisitorCount:", error);
       return null;
     }
-
-    const currentCount = selectData?.value ?? 0;
-    const newCount = currentCount + 1;
-
-    // 2. Update the count
-    const { error: updateError } = await supabase
-      .from('counters')
-      .update({ value: newCount })
-      .eq('name', 'visitors');
-
-    if (updateError) {
-      console.error("Error updating visitor count:", updateError.message);
-      // Even if update fails, we can still return the fetched count + 1
-      return newCount;
-    }
-
-    return newCount;
-  } catch (error) {
-    console.error("An unexpected error occurred:", error);
-    return null;
   }
-}
 
 export async function uploadResume(formData: FormData) {
     const file = formData.get("resume") as File | null;
@@ -182,7 +148,7 @@ export async function uploadResume(formData: FormData) {
     if (file.size > 5 * 1024 * 1024) { // 5MB limit
       return { success: false, error: "File is too large. Maximum size is 5MB." };
     }
-  
+    
     const allowedTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword"];
     if (!allowedTypes.includes(file.type)) {
       return { success: false, error: "Invalid file type. Please upload a PDF or Word document." };
