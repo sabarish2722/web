@@ -30,27 +30,31 @@ const partnerSchema = z.object({
 });
 
 export async function submitPartnerForm(data: unknown) {
-  const result = partnerSchema.safeParse(data);
-  if (!result.success) {
-    return { success: false, error: "Invalid form data." };
-  }
+  try {
+    const result = partnerSchema.safeParse(data);
+    if (!result.success) {
+      return { success: false, error: "Invalid form data." };
+    }
 
-  if (!supabaseAdmin) {
-    return { success: false, error: "Backend not configured correctly. Please contact support." };
-  }
+    if (!supabaseAdmin) {
+      return { success: false, error: "Backend not configured correctly. Please contact support." };
+    }
 
-  const { error } = await supabaseAdmin.from("partners").insert([result.data]);
+    const { error } = await supabaseAdmin.from("partners").insert([result.data]);
 
-  if (error) {
-    console.error("Error writing to Supabase (partners): ", error);
-    // Return the actual error message from Supabase
-    return { success: false, error: `Failed to submit form: ${error.message}` };
+    if (error) {
+      console.error("Error writing to Supabase (partners): ", error);
+      return { success: false, error: `Failed to submit form: ${error.message}` };
+    }
+    
+    return {
+      success: true,
+      message: "Thank you for your interest! We will be in touch shortly.",
+    };
+  } catch(e: any) {
+    console.error("Caught exception in submitPartnerForm: ", e);
+    return { success: false, error: e.message };
   }
-  
-  return {
-    success: true,
-    message: "Thank you for your interest! We will be in touch shortly.",
-  };
 }
 
 const investorSchema = z.object({
@@ -60,26 +64,31 @@ const investorSchema = z.object({
 });
 
 export async function submitInvestorForm(data: unknown) {
-  const result = investorSchema.safeParse(data);
-  if (!result.success) {
-    return { success: false, error: "Invalid form data." };
-  }
-  
-  if (!supabaseAdmin) {
-    return { success: false, error: "Backend not configured correctly. Please contact support." };
-  }
+  try {
+    const result = investorSchema.safeParse(data);
+    if (!result.success) {
+      return { success: false, error: "Invalid form data." };
+    }
+    
+    if (!supabaseAdmin) {
+      return { success: false, error: "Backend not configured correctly. Please contact support." };
+    }
 
-  const { error } = await supabaseAdmin.from("investors").insert([result.data]);
+    const { error } = await supabaseAdmin.from("investors").insert([result.data]);
 
-  if (error) {
-    console.error("Error writing to Supabase (investors): ", error);
-    return { success: false, error: `Failed to submit form: ${error.message}` };
+    if (error) {
+      console.error("Error writing to Supabase (investors): ", error);
+      return { success: false, error: `Failed to submit form: ${error.message}` };
+    }
+
+    return {
+      success: true,
+      message: "Thank you! You will receive the investor deck shortly.",
+    };
+  } catch(e: any) {
+    console.error("Caught exception in submitInvestorForm: ", e);
+    return { success: false, error: e.message };
   }
-
-  return {
-    success: true,
-    message: "Thank you! You will receive the investor deck shortly.",
-  };
 }
 
 const contactSchema = z.object({
@@ -89,30 +98,35 @@ const contactSchema = z.object({
 });
 
 export async function submitContactForm(data: unknown) {
-  const result = contactSchema.safeParse(data);
-  if (!result.success) {
-    return { success: false, error: "Invalid form data." };
-  }
+  try {
+    const result = contactSchema.safeParse(data);
+    if (!result.success) {
+      return { success: false, error: "Invalid form data." };
+    }
 
-  if (!supabaseAdmin) {
-    return { success: false, error: "Backend not configured correctly. Please contact support." };
-  }
-  
-  const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
+    if (!supabaseAdmin) {
+      return { success: false, error: "Backend not configured correctly. Please contact support." };
+    }
+    
+    const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
 
-  if (error) {
-      console.error("Error writing to Supabase (contact): ", error);
-      // Return the actual error message from Supabase
-      return { success: false, error: `Failed to submit form: ${error.message}` };
+    if (error) {
+        console.error("Error writing to Supabase (contact): ", error);
+        return { success: false, error: `Failed to submit form: ${error.message}` };
+    }
+    
+    return {
+      success: true,
+      message: "Your message has been sent! We will get back to you soon.",
+    };
+  } catch(e: any) {
+    console.error("Caught exception in submitContactForm: ", e);
+    return { success: false, error: e.message };
   }
-  
-  return {
-    success: true,
-    message: "Your message has been sent! We will get back to you soon.",
-  };
 }
 
 export async function uploadResume(formData: FormData) {
+  try {
     if (!supabaseAdmin) {
         return { success: false, error: "Supabase admin client is not initialized. Check server environment variables." };
     }
@@ -133,31 +147,30 @@ export async function uploadResume(formData: FormData) {
     
     const filePath = `public/${Date.now()}-${file.name}`;
   
-    try {
-      const { error: uploadError } = await supabaseAdmin.storage
-        .from("resumes")
-        .upload(filePath, file);
-  
-      if (uploadError) {
-        throw uploadError;
-      }
-  
-      const { error: dbError } = await supabaseAdmin.from("resumes").insert({
-        file_path: filePath,
-        original_filename: file.name,
-        file_size: file.size,
-      });
-  
-      if (dbError) {
-        // If the database insert fails, we should try to delete the uploaded file.
-        await supabaseAdmin.storage.from("resumes").remove([filePath]);
-        throw dbError;
-      }
-  
-      return { success: true, message: "Resume uploaded successfully!" };
-    } catch (error) {
-      const supabaseError = error as any;
-      console.error("Error uploading resume:", supabaseError);
-      return { success: false, error: `Upload failed: ${supabaseError.message}` };
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from("resumes")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw uploadError;
     }
+
+    const { error: dbError } = await supabaseAdmin.from("resumes").insert({
+      file_path: filePath,
+      original_filename: file.name,
+      file_size: file.size,
+    });
+
+    if (dbError) {
+      // If the database insert fails, we should try to delete the uploaded file.
+      await supabaseAdmin.storage.from("resumes").remove([filePath]);
+      throw dbError;
+    }
+
+    return { success: true, message: "Resume uploaded successfully!" };
+  } catch (error) {
+    const supabaseError = error as any;
+    console.error("Error uploading resume:", supabaseError);
+    return { success: false, error: `Upload failed: ${supabaseError.message}` };
   }
+}
