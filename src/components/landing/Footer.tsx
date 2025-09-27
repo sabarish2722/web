@@ -1,6 +1,7 @@
 
 import Link from "next/link";
 import { Twitter, Linkedin, Facebook, Mail, Phone, Info } from "lucide-react";
+import ContactForm from "../forms/ContactForm";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -38,28 +39,11 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        <div>
+        <div className="p-6 bg-background rounded-lg shadow-lg">
           <h3 className="text-2xl font-headline font-semibold mb-4">
-            Get in Touch
+            Give us a Suggestion
           </h3>
-          <div className="flex flex-col gap-4 text-muted-foreground">
-             <a href="mailto:ceo@macs11.com" className="flex items-center gap-3 hover:text-primary">
-                <Mail className="w-5 h-5 text-primary" />
-                <span>ceo@macs11.com</span>
-             </a>
-             <a href="tel:8919702207" className="flex items-center gap-3 hover:text-primary">
-                <Phone className="w-5 h-5 text-primary" />
-                <span>8919702207</span>
-             </a>
-          </div>
-            <div className="mt-6 p-4 bg-accent/10 border-l-4 border-accent rounded-r-lg">
-                <div className="flex items-start gap-3">
-                    <Info className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
-                    <p className="text-accent-foreground/90">
-                        For any immediate concerns or to provide feedback, please do not hesitate to contact us. We are here to help!
-                    </p>
-                </div>
-            </div>
+          <ContactForm />
         </div>
       </div>
       <div className="container max-w-7xl mt-12 pt-8 border-t">

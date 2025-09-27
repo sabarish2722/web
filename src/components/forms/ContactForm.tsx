@@ -94,7 +94,7 @@ export default function ContactForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="Your Message" {...field} rows={4} />
+                <Textarea placeholder="Your Suggestion" {...field} rows={4} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -102,7 +102,7 @@ export default function ContactForm() {
         />
         <Button type="submit" className="w-full sm:w-auto" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Send Message
+          Send Suggestion
         </Button>
       </form>
     </Form>

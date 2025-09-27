@@ -97,7 +97,7 @@ export async function submitContactForm(data: unknown) {
       return { success: false, error: "Backend not configured correctly. Please contact support." };
     }
     
-    const { error } = await supabaseAdmin.from("contactSubmission").insert([result.data]);
+    const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
 
     if (error) {
         console.error("Error writing to Supabase (contact): ", error);
