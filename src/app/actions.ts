@@ -52,33 +52,6 @@ export async function submitPartnerForm(data: unknown) {
   }
 }
 
-const investorSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  company: z.string().min(2, "Company name is required."),
-  email: z.string().email("Invalid email address."),
-});
-
-export async function submitInvestorForm(data: unknown) {
-  const result = investorSchema.safeParse(data);
-  if (!result.success) {
-    return { success: false, error: "Invalid form data." };
-  }
-
-  try {
-    await addDoc(collection(db, "investors"), {
-      ...result.data,
-      submittedAt: serverTimestamp(),
-    });
-    return {
-      success: true,
-      message: "Thank you! You will receive the investor deck shortly.",
-    };
-  } catch (error) {
-    console.error("Error writing to Firestore: ", error);
-    return { success: false, error: "Failed to submit form. Please try again later." };
-  }
-}
-
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   email: z.string().email("Invalid email address."),

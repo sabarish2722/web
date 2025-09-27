@@ -21,7 +21,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { submitInvestorForm } from "@/app/actions";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -46,13 +45,15 @@ export default function InvestorForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    const result = await submitInvestorForm(values);
+    // const result = await submitInvestorForm(values);
+    console.log("Investor form submission is disabled.");
+    const result = { success: false, error: "This form is not active." };
     setIsSubmitting(false);
 
     if (result.success) {
       toast({
         title: "Request Sent!",
-        description: result.message,
+        description: "Thank you for your interest!",
       });
       form.reset();
     } else {
