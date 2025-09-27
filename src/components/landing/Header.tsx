@@ -22,6 +22,7 @@ const Logo = () => (
     viewBox="0 0 163 44"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className="text-primary"
   >
     <path
       d="M27.424 43.04L13.752 1.28H19.016L30.12 35.84L41.224 1.28H46.52L32.816 43.04H27.424Z"
@@ -42,13 +43,10 @@ const Logo = () => (
       fill="#F25822"
       transform="translate(14, 0)"
     />
-    <path
-      d="M139.125 43.04V1.28H144.389V43.04H139.125Z"
-      fill="#00509D"
-    />
+    <path d="M139.125 43.04V1.28H144.389V43.04H139.125Z" fill="currentColor" />
     <path
       d="M149.333 43.04V1.28H154.597V43.04H149.333Z"
-      fill="#00509D"
+      fill="currentColor"
     />
   </svg>
 );
