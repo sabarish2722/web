@@ -16,9 +16,9 @@ const navLinks = [
 ];
 
 const Logo = () => (
-  <div className="flex items-center" style={{ fontFamily: "Poppins, sans-serif", fontSize: "30px", fontWeight: "700" }}>
-    <span style={{ color: "#F94D1D" }}>macs</span>
-    <span style={{ color: "#2622E7" }}>11</span>
+  <div className="flex items-center text-3xl font-bold font-headline">
+    <span className="text-[#F94D1D]">macs</span>
+    <span className="text-[#2622E7]">11</span>
   </div>
 );
 
