@@ -65,9 +65,9 @@ export default function InvestorForm() {
   }
 
   return (
-    <Card className="w-full max-w-lg mx-auto shadow-2xl shadow-accent/10">
+    <Card className="w-full max-w-lg mx-auto shadow-2xl shadow-primary/10">
       <CardHeader>
-        <CardTitle className="font-headline text-2xl text-accent">
+        <CardTitle className="font-headline text-2xl text-primary">
           Request Investor Deck
         </CardTitle>
         <CardDescription>
@@ -118,8 +118,7 @@ export default function InvestorForm() {
             />
             <Button
               type="submit"
-              variant="accent"
-              className="w-full bg-accent hover:bg-accent/90"
+              className="w-full"
               disabled={isSubmitting}
             >
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

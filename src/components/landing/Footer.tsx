@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, Twitter, Linkedin, Facebook } from "lucide-react";
+import { Zap, Twitter, Linkedin, Facebook, Mail, Phone } from "lucide-react";
 import ContactForm from "../forms/ContactForm";
 
 const socialLinks = [
@@ -23,6 +23,16 @@ export default function Footer() {
             Your city, simplified. Fast, trusted hyperlocal services at your
             fingertips.
           </p>
+          <div className="flex flex-col gap-2 mt-2 text-muted-foreground">
+             <a href="mailto:ceo@macs11.com" className="flex items-center gap-2 hover:text-primary">
+                <Mail className="w-5 h-5" />
+                <span>ceo@macs11.com</span>
+             </a>
+             <a href="tel:8919702207" className="flex items-center gap-2 hover:text-primary">
+                <Phone className="w-5 h-5" />
+                <span>8919702207</span>
+             </a>
+          </div>
           <div className="flex gap-4 mt-2">
             {socialLinks.map((link) => (
               <a
@@ -53,7 +63,7 @@ export default function Footer() {
             <Link href="#" className="hover:text-foreground">
               About Us
             </Link>
-            <Link href="#" className="hover:text-foreground">
+            <Link href="#careers" className="hover:text-foreground">
               Careers
             </Link>
             <Link href="#" className="hover:text-foreground">

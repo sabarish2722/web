@@ -14,7 +14,7 @@ export default function Mission() {
             level.&rdquo;
           </p>
         </blockquote>
-        <p className="mt-6 font-bold font-headline text-primary text-lg">
+        <p className="mt-6 font-bold font-headline text-accent text-lg">
           - The macs11 Team
         </p>
       </div>

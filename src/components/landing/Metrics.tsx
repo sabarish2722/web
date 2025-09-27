@@ -40,8 +40,8 @@ export default function Metrics() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           {metrics.map((metric) => (
             <div key={metric.label} className="flex flex-col items-center">
-              <metric.icon className="w-12 h-12 text-accent mb-4" />
-              <p className="text-5xl font-bold font-headline text-primary">
+              <metric.icon className="w-12 h-12 text-primary mb-4" />
+              <p className="text-5xl font-bold font-headline">
                 {metric.value}
               </p>
               <p className="text-muted-foreground mt-2 text-lg">
