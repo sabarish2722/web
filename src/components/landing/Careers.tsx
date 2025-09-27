@@ -11,7 +11,7 @@ export default function Careers() {
             Are you passionate about simplifying lives and empowering communities through technology? We are looking for talented individuals to join our mission.
           </p>
           <div className="mt-8">
-            <Button asChild size="lg">
+            <Button size="lg">
                 <a href="mailto:ceo@macs11.com?subject=Career%20Inquiry">
                     Apply Now
                 </a>

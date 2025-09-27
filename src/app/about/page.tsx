@@ -21,7 +21,11 @@ const coreValues = [
 ];
 
 export default function AboutPage() {
-    const aboutImage = PlaceHolderImages.find((img) => img.id === "about-us-image");
+    const aboutImage = PlaceHolderImages.find((img) => img.id === "about-us-image") ?? {
+        imageUrl: `https://picsum.photos/seed/aboutpage/1200/600`,
+        description: "Placeholder for about us image",
+        imageHint: "team collaboration"
+    };
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
@@ -36,20 +40,18 @@ export default function AboutPage() {
                     </div>
                 </section>
 
-                {aboutImage && (
-                    <section className="container max-w-5xl">
-                        <div className="rounded-lg overflow-hidden shadow-2xl shadow-primary/10">
-                            <Image
-                                src={aboutImage.imageUrl}
-                                alt={aboutImage.description}
-                                width={1200}
-                                height={600}
-                                className="w-full object-cover"
-                                data-ai-hint={aboutImage.imageHint}
-                            />
-                        </div>
-                    </section>
-                )}
+                <section className="container max-w-5xl">
+                    <div className="rounded-lg overflow-hidden shadow-2xl shadow-primary/10">
+                        <Image
+                            src={aboutImage.imageUrl}
+                            alt={aboutImage.description}
+                            width={1200}
+                            height={600}
+                            className="w-full object-cover"
+                            data-ai-hint={aboutImage.imageHint}
+                        />
+                    </div>
+                </section>
 
                 <section className="py-20 md:py-32">
                     <div className="container max-w-5xl grid lg:grid-cols-2 gap-12 items-center">
