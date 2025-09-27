@@ -22,7 +22,7 @@ const Logo = () => (
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4">
         <Users className="w-5 h-5" />
-        {count ? (
+        {typeof count === 'number' ? (
           <span>
             <span className="font-bold">{count.toLocaleString()}</span> Total Visitors
           </span>
@@ -54,7 +54,7 @@ export default function Footer() {
                 <Phone className="w-5 h-5" />
                 <span>8919702207</span>
              </a>
-             <a href="https://macs11.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
+             <a href="https://macs11.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hovertext-primary">
                 <Globe className="w-5 h-5" />
                 <span>macs11.com</span>
              </a>

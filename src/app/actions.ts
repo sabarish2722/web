@@ -121,15 +121,51 @@ export async function submitContactForm(data: unknown) {
 
 export async function getVisitorCount() {
   try {
-    const { data, error } = await supabase.rpc('increment_visitor_count');
-    
-    if (error) {
-      console.error("Error fetching visitor count:", error.message);
-      // Return a fallback or handle the error as needed
+    // There's a race condition here, but for a simple visitor counter, it's acceptable.
+    // For a critical counter, a database transaction or a more robust RPC function would be better.
+
+    // 1. Fetch the current count
+    let { data: selectData, error: selectError } = await supabase
+      .from('counters')
+      .select('value')
+      .eq('name', 'visitors')
+      .single();
+
+    if (selectError) {
+      // If the row doesn't exist, create it.
+      if (selectError.code === 'PGRST116') {
+        const { data: insertData, error: insertError } = await supabase
+          .from('counters')
+          .insert({ name: 'visitors', value: 1 })
+          .select('value')
+          .single();
+
+        if (insertError) {
+          console.error("Error inserting initial visitor count:", insertError.message);
+          return null;
+        }
+        return insertData?.value ?? 1;
+      }
+      console.error("Error fetching visitor count:", selectError.message);
       return null;
     }
 
-    return data;
+    const currentCount = selectData?.value ?? 0;
+    const newCount = currentCount + 1;
+
+    // 2. Update the count
+    const { error: updateError } = await supabase
+      .from('counters')
+      .update({ value: newCount })
+      .eq('name', 'visitors');
+
+    if (updateError) {
+      console.error("Error updating visitor count:", updateError.message);
+      // Even if update fails, we can still return the fetched count + 1
+      return newCount;
+    }
+
+    return newCount;
   } catch (error) {
     console.error("An unexpected error occurred:", error);
     return null;
