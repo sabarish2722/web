@@ -2,8 +2,7 @@
 "use server";
 
 import { z } from "zod";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { supabase } from "@/lib/supabase";
 
 // This type needs to be defined, assuming it's a string for now.
 // You might need to adjust it based on what `generateWebsiteContent` expects.
@@ -45,16 +44,18 @@ export async function submitPartnerForm(data: unknown) {
   }
 
   try {
-    await addDoc(collection(db, "partners"), {
-      ...result.data,
-      submittedAt: serverTimestamp(),
-    });
+    const { error } = await supabase.from("partners").insert([result.data]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    
     return {
       success: true,
       message: "Thank you for your interest! We will be in touch shortly.",
     };
   } catch (error) {
-    console.error("Error writing to Firestore: ", error);
+    console.error("Error writing to Supabase: ", error);
     return { success: false, error: "Failed to submit form. Please try again later." };
   }
 }
@@ -72,16 +73,18 @@ export async function submitInvestorForm(data: unknown) {
   }
 
   try {
-    await addDoc(collection(db, "investors"), {
-      ...result.data,
-      submittedAt: serverTimestamp(),
-    });
+    const { error } = await supabase.from("investors").insert([result.data]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
     return {
       success: true,
       message: "Thank you! You will receive the investor deck shortly.",
     };
   } catch (error) {
-    console.error("Error writing to Firestore: ", error);
+    console.error("Error writing to Supabase: ", error);
     return { success: false, error: "Failed to submit form. Please try again later." };
   }
 }
@@ -99,16 +102,18 @@ export async function submitContactForm(data: unknown) {
   }
 
   try {
-    await addDoc(collection(db, "contactSubmissions"), {
-      ...result.data,
-      submittedAt: serverTimestamp(),
-    });
+    const { error } = await supabase.from("contactSubmissions").insert([result.data]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    
     return {
       success: true,
       message: "Your message has been sent! We will get back to you soon.",
     };
   } catch (error) {
-    console.error("Error writing to Firestore: ", error);
+    console.error("Error writing to Supabase: ", error);
     return { success: false, error: "Failed to submit form. Please try again later." };
   }
 }
