@@ -1,7 +1,6 @@
 
 import Link from "next/link";
-import { Twitter, Linkedin, Facebook, Mail, Phone, Globe } from "lucide-react";
-import ContactForm from "../forms/ContactForm";
+import { Twitter, Linkedin, Facebook, Mail, Phone, MapPin } from "lucide-react";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -18,7 +17,7 @@ const Logo = () => (
 export default function Footer() {
   return (
     <footer id="contact" className="py-20 bg-card border-t">
-      <div className="container max-w-7xl grid lg:grid-cols-3 gap-12">
+      <div className="container max-w-7xl grid lg:grid-cols-2 gap-12">
         <div className="flex flex-col gap-4">
           <Link href="/" className="flex items-center gap-2 w-fit">
             <Logo />
@@ -27,21 +26,7 @@ export default function Footer() {
             Your city, simplified. Fast, trusted hyperlocal services at your
             fingertips.
           </p>
-          <div className="flex flex-col gap-2 mt-2 text-muted-foreground">
-             <a href="mailto:ceo@macs11.com" className="flex items-center gap-2 hover:text-primary">
-                <Mail className="w-5 h-5" />
-                <span>ceo@macs11.com</span>
-             </a>
-             <a href="tel:8919702207" className="flex items-center gap-2 hover:text-primary">
-                <Phone className="w-5 h-5" />
-                <span>8919702207</span>
-             </a>
-             <a href="https://macs11.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hovertext-primary">
-                <Globe className="w-5 h-5" />
-                <span>macs11.com</span>
-             </a>
-          </div>
-          <div className="flex gap-4 mt-2">
+           <div className="flex gap-4 mt-2">
             {socialLinks.map((link) => (
               <a
                 key={link.name}
@@ -54,14 +39,24 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        <div className="lg:col-span-2">
+        <div>
           <h3 className="text-2xl font-headline font-semibold mb-4">
-            Get In Touch
+            Contact Information
           </h3>
-          <p className="text-muted-foreground mb-6">
-            Have a question or want to work with us? Drop us a line.
-          </p>
-          <ContactForm />
+          <div className="flex flex-col gap-4 text-muted-foreground">
+             <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 mt-1 flex-shrink-0 text-primary" />
+                <span>8-1-364/A/1, First Floor, Opposite SBI, Shaikpet, Tolichowki, Hyderabad, Telangana, 500008.</span>
+             </div>
+             <a href="mailto:ceo@macs11.com" className="flex items-center gap-3 hover:text-primary">
+                <Mail className="w-5 h-5 text-primary" />
+                <span>ceo@macs11.com</span>
+             </a>
+             <a href="tel:8919702207" className="flex items-center gap-3 hover:text-primary">
+                <Phone className="w-5 h-5 text-primary" />
+                <span>8919702207</span>
+             </a>
+          </div>
         </div>
       </div>
       <div className="container max-w-7xl mt-12 pt-8 border-t">
