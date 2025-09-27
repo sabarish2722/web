@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import { Twitter, Linkedin, Facebook, Mail, Phone, MapPin } from "lucide-react";
+import { Twitter, Linkedin, Facebook, Mail, Phone } from "lucide-react";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -23,8 +23,7 @@ export default function Footer() {
             <Logo />
           </Link>
           <p className="text-muted-foreground">
-            Your city, simplified. Fast, trusted hyperlocal services at your
-            fingertips.
+            Have questions or suggestions? We'd love to hear from you.
           </p>
            <div className="flex gap-4 mt-2">
             {socialLinks.map((link) => (
@@ -41,13 +40,9 @@ export default function Footer() {
         </div>
         <div>
           <h3 className="text-2xl font-headline font-semibold mb-4">
-            Contact Information
+            Get in Touch
           </h3>
           <div className="flex flex-col gap-4 text-muted-foreground">
-             <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 mt-1 flex-shrink-0 text-primary" />
-                <span>8-1-364/A/1, First Floor, Opposite SBI, Shaikpet, Tolichowki, Hyderabad, Telangana, 500008.</span>
-             </div>
              <a href="mailto:ceo@macs11.com" className="flex items-center gap-3 hover:text-primary">
                 <Mail className="w-5 h-5 text-primary" />
                 <span>ceo@macs11.com</span>
