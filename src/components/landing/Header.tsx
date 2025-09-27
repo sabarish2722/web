@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -37,7 +36,7 @@ export default function Header() {
             </Link>
         </div>
 
-        <nav className="hidden md:flex flex-1 items-center justify-center gap-8 text-sm font-medium">
+        <nav className="hidden md:flex items-center justify-center gap-8 text-sm font-medium">
           {navLinks.map((link) => (
             <Link
               key={link.href}
