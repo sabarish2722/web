@@ -4,29 +4,6 @@
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase";
 
-// This type needs to be defined, assuming it's a string for now.
-// You might need to adjust it based on what `generateWebsiteContent` expects.
-interface GenerateWebsiteContentInput {
-  prompt: string;
-}
-
-// Assuming this function exists elsewhere, as it's used in `handleGenerateContent`
-// If not, you'll need to implement it.
-declare function generateWebsiteContent(input: GenerateWebsiteContentInput): Promise<any>;
-
-
-export async function handleGenerateContent(input: GenerateWebsiteContentInput) {
-  try {
-    const result = await generateWebsiteContent(input);
-    return { success: true, data: result };
-  } catch (error) {
-    console.error(error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred.";
-    return { success: false, error: `Failed to generate content: ${errorMessage}` };
-  }
-}
-
 const partnerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   businessName: z.string().min(2, "Business name is required."),
