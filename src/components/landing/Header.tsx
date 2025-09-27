@@ -16,24 +16,10 @@ const navLinks = [
 ];
 
 const Logo = () => (
-  <svg
-    width="135"
-    height="36"
-    viewBox="0 0 130 36"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <text
-      x="0"
-      y="28"
-      fontFamily="Poppins, sans-serif"
-      fontSize="30"
-      fontWeight="700"
-    >
-      <tspan fill="#F94D1D">macs</tspan>
-      <tspan fill="#2622E7">11</tspan>
-    </text>
-  </svg>
+  <div className="flex items-center" style={{ fontFamily: "Poppins, sans-serif", fontSize: "30px", fontWeight: "700" }}>
+    <span style={{ color: "#F94D1D" }}>macs</span>
+    <span style={{ color: "#2622E7" }}>11</span>
+  </div>
 );
 
 export default function Header() {
