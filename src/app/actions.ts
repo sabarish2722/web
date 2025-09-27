@@ -48,7 +48,7 @@ export async function submitPartnerForm(data: unknown) {
   }
 
   try {
-    const { error } = await supabaseAdmin.from("partners").insert([result.data]);
+    const { error } = await supabaseAdmin.from("partners").schema('public').insert([result.data]);
 
     if (error) {
       throw new Error(error.message);
@@ -82,7 +82,7 @@ export async function submitInvestorForm(data: unknown) {
   }
 
   try {
-    const { error } = await supabaseAdmin.from("investors").insert([result.data]);
+    const { error } = await supabaseAdmin.from("investors").schema('public').insert([result.data]);
 
     if (error) {
       throw new Error(error.message);
@@ -116,7 +116,7 @@ export async function submitContactForm(data: unknown) {
   }
 
   try {
-    const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
+    const { error } = await supabaseAdmin.from("contactSubmissions").schema('public').insert([result.data]);
 
     if (error) {
       throw new Error(error.message);
