@@ -4,8 +4,17 @@
 import { z } from "zod";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-<<<<<<< HEAD
-=======
+
+// This type needs to be defined, assuming it's a string for now.
+// You might need to adjust it based on what `generateWebsiteContent` expects.
+interface GenerateWebsiteContentInput {
+  prompt: string;
+}
+
+// Assuming this function exists elsewhere, as it's used in `handleGenerateContent`
+// If not, you'll need to implement it.
+declare function generateWebsiteContent(input: GenerateWebsiteContentInput): Promise<any>;
+
 
 export async function handleGenerateContent(input: GenerateWebsiteContentInput) {
   try {
@@ -18,7 +27,6 @@ export async function handleGenerateContent(input: GenerateWebsiteContentInput) 
     return { success: false, error: `Failed to generate content: ${errorMessage}` };
   }
 }
->>>>>>> 19f9702 (if investor or gives details where ot will store)
 
 const partnerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -48,9 +56,6 @@ export async function submitPartnerForm(data: unknown) {
   } catch (error) {
     console.error("Error writing to Firestore: ", error);
     return { success: false, error: "Failed to submit form. Please try again later." };
-<<<<<<< HEAD
-  }
-=======
   }
 }
 
@@ -79,7 +84,6 @@ export async function submitInvestorForm(data: unknown) {
     console.error("Error writing to Firestore: ", error);
     return { success: false, error: "Failed to submit form. Please try again later." };
   }
->>>>>>> 19f9702 (if investor or gives details where ot will store)
 }
 
 const contactSchema = z.object({
