@@ -4,6 +4,7 @@ import "./globals.css";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import WhatsAppButton from "@/components/landing/WhatsAppButton";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata: Metadata = {
   title: "macs11 - Your City, Simplified",
@@ -42,6 +43,7 @@ export default function RootLayout({
         <WhatsAppButton phoneNumber="8919702207" />
         <Toaster />
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
