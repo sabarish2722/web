@@ -6,6 +6,8 @@ import {
   type GenerateWebsiteContentInput,
 } from "@/ai/flows/ai-headline-generation";
 import { z } from "zod";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export async function handleGenerateContent(input: GenerateWebsiteContentInput) {
   try {
@@ -35,12 +37,19 @@ export async function submitPartnerForm(data: unknown) {
     return { success: false, error: "Invalid form data." };
   }
 
-  console.log("Partner Form Data:", result.data);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return {
-    success: true,
-    message: "Thank you for your interest! We will be in touch shortly.",
-  };
+  try {
+    await addDoc(collection(db, "partners"), {
+      ...result.data,
+      submittedAt: serverTimestamp(),
+    });
+    return {
+      success: true,
+      message: "Thank you for your interest! We will be in touch shortly.",
+    };
+  } catch (error) {
+    console.error("Error writing to Firestore: ", error);
+    return { success: false, error: "Failed to submit form. Please try again later." };
+  }
 }
 
 const investorSchema = z.object({
@@ -55,12 +64,19 @@ export async function submitInvestorForm(data: unknown) {
     return { success: false, error: "Invalid form data." };
   }
 
-  console.log("Investor Form Data:", result.data);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return {
-    success: true,
-    message: "Thank you! You will receive the investor deck shortly.",
-  };
+  try {
+    await addDoc(collection(db, "investors"), {
+      ...result.data,
+      submittedAt: serverTimestamp(),
+    });
+    return {
+      success: true,
+      message: "Thank you! You will receive the investor deck shortly.",
+    };
+  } catch (error) {
+    console.error("Error writing to Firestore: ", error);
+    return { success: false, error: "Failed to submit form. Please try again later." };
+  }
 }
 
 const contactSchema = z.object({
@@ -75,10 +91,17 @@ export async function submitContactForm(data: unknown) {
     return { success: false, error: "Invalid form data." };
   }
 
-  console.log("Contact Form Data:", result.data);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return {
-    success: true,
-    message: "Your message has been sent! We will get back to you soon.",
-  };
+  try {
+    await addDoc(collection(db, "contactSubmissions"), {
+      ...result.data,
+      submittedAt: serverTimestamp(),
+    });
+    return {
+      success: true,
+      message: "Your message has been sent! We will get back to you soon.",
+    };
+  } catch (error) {
+    console.error("Error writing to Firestore: ", error);
+    return { success: false, error: "Failed to submit form. Please try again later." };
+  }
 }
