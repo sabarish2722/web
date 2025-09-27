@@ -6,8 +6,8 @@ import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import WhatsAppButton from "@/components/landing/WhatsAppButton";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
-import Footer from "@/components/footer"; // Import the Footer component
-import Navbar from "@/components/navbar"; // Import the Navbar component
+import Footer from "@/components/landing/Footer"; 
+import Header from "@/components/landing/Header"; 
 
 export const metadata: Metadata = {
   title: "macs11 - Your City, Simplified",
@@ -42,7 +42,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
         {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
-        <Navbar />
+        <Header />
         <main className="flex-grow">{children}</main>
         <WhatsAppButton phoneNumber="8919702207" />
         <Toaster />
