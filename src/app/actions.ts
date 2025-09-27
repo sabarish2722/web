@@ -43,8 +43,12 @@ export async function submitPartnerForm(data: unknown) {
     return { success: false, error: "Invalid form data." };
   }
 
+  if (!supabaseAdmin) {
+    return { success: false, error: "Backend not configured correctly. Please contact support." };
+  }
+
   try {
-    const { error } = await supabase.from("partners").insert([result.data]);
+    const { error } = await supabaseAdmin.from("partners").insert([result.data]);
 
     if (error) {
       throw new Error(error.message);
@@ -101,8 +105,12 @@ export async function submitContactForm(data: unknown) {
     return { success: false, error: "Invalid form data." };
   }
 
+  if (!supabaseAdmin) {
+    return { success: false, error: "Backend not configured correctly. Please contact support." };
+  }
+
   try {
-    const { error } = await supabase.from("contactSubmissions").insert([result.data]);
+    const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
 
     if (error) {
       throw new Error(error.message);
@@ -120,58 +128,63 @@ export async function submitContactForm(data: unknown) {
 
 
 export async function getVisitorCount() {
-    try {
-      // Step 1: Select the current count.
-      const { data: selectData, error: selectError } = await supabase
+  if (!supabaseAdmin) {
+      console.error("Supabase admin client not initialized.");
+      // Return a non-null value to avoid breaking the UI
+      return 0; 
+  }
+  try {
+    // Step 1: Select the current count.
+    const { data: selectData, error: selectError } = await supabaseAdmin
+      .from('counters')
+      .select('value')
+      .eq('name', 'visitors')
+      .single();
+
+    // If the row doesn't exist (e.g., first time running)
+    if (selectError && selectError.code === 'PGRST116') {
+      // Insert the first count and return it.
+      const { data: insertData, error: insertError } = await supabaseAdmin
         .from('counters')
+        .insert({ name: 'visitors', value: 1 })
         .select('value')
-        .eq('name', 'visitors')
         .single();
-  
-      // If the row doesn't exist (e.g., first time running)
-      if (selectError && selectError.code === 'PGRST116') {
-        // Insert the first count and return it.
-        const { data: insertData, error: insertError } = await supabase
-          .from('counters')
-          .insert({ name: 'visitors', value: 1 })
-          .select('value')
-          .single();
-        
-        if (insertError) {
-          console.error("Error inserting initial visitor count:", insertError.message);
-          return null;
-        }
-        return insertData?.value ?? 1;
-      }
       
-      // If there was a different selection error
-      if (selectError) {
-          console.error("Error fetching visitor count:", selectError.message);
-          return null;
+      if (insertError) {
+        console.error("Error inserting initial visitor count:", insertError.message);
+        return 1;
       }
-      
-      // Step 2: Increment the count.
-      const newCount = (selectData.value || 0) + 1;
-      
-      // Step 3: Update the count in the database.
-      const { error: updateError } = await supabase
-        .from('counters')
-        .update({ value: newCount })
-        .eq('name', 'visitors');
-  
-      if (updateError) {
-        console.error("Error updating visitor count:", updateError.message);
-        // Return the count we fetched, even if update failed.
-        return newCount - 1;
-      }
-  
-      // Step 4: Return the new count.
-      return newCount;
-  
-    } catch (error) {
-      console.error("An unexpected error occurred in getVisitorCount:", error);
-      return null;
+      return insertData?.value ?? 1;
     }
+    
+    // If there was a different selection error
+    if (selectError) {
+        console.error("Error fetching visitor count:", selectError.message);
+        return 0;
+    }
+    
+    // Step 2: Increment the count.
+    const newCount = (selectData.value || 0) + 1;
+    
+    // Step 3: Update the count in the database.
+    const { error: updateError } = await supabaseAdmin
+      .from('counters')
+      .update({ value: newCount })
+      .eq('name', 'visitors');
+
+    if (updateError) {
+      console.error("Error updating visitor count:", updateError.message);
+      // Return the count we fetched, even if update failed.
+      return newCount - 1;
+    }
+
+    // Step 4: Return the new count.
+    return newCount;
+
+  } catch (error) {
+    console.error("An unexpected error occurred in getVisitorCount:", error);
+    return 0;
+  }
 }
 
 export async function uploadResume(formData: FormData) {
@@ -223,6 +236,3 @@ export async function uploadResume(formData: FormData) {
       return { success: false, error: `Upload failed: ${errorMessage}` };
     }
   }
-
-    
-
