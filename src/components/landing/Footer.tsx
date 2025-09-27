@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, Twitter, Linkedin, Facebook, Mail, Phone } from "lucide-react";
+import { Zap, Twitter, Linkedin, Facebook, Mail, Phone, Globe } from "lucide-react";
 import ContactForm from "../forms/ContactForm";
 
 const socialLinks = [
@@ -31,6 +31,10 @@ export default function Footer() {
              <a href="tel:8919702207" className="flex items-center gap-2 hover:text-primary">
                 <Phone className="w-5 h-5" />
                 <span>8919702207</span>
+             </a>
+             <a href="https://macs11.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
+                <Globe className="w-5 h-5" />
+                <span>macs11.com</span>
              </a>
           </div>
           <div className="flex gap-4 mt-2">
