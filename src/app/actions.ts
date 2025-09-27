@@ -117,23 +117,12 @@ export async function getVisitorCount() {
     return 0;
   }
   try {
-    const { data, error, count } = await supabaseAdmin.rpc('increment_visitor_count');
+    const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
 
     if (error) {
       // Log the error but don't crash the app
       console.error("Error calling RPC to increment visitor count:", error.message);
-      // Try to fetch the current count as a fallback
-      const { data: fallbackData, error: fallbackError } = await supabaseAdmin
-        .from('counters')
-        .select('value')
-        .eq('name', 'visitors')
-        .single();
-      
-      if (fallbackError) {
-        console.error("Error fetching fallback visitor count:", fallbackError.message);
-        return 0;
-      }
-      return fallbackData?.value ?? 0;
+      return 0;
     }
 
     return data ?? 0;
