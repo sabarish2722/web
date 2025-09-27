@@ -16,10 +16,10 @@ export default function Partners() {
   );
 
   return (
-    <section id="partners" className="py-20 md:py-32">
-      <div className="container grid lg:grid-cols-2 gap-12 items-center max-w-7xl">
+    <section id="partners" className="py-16 sm:py-20 md:py-24 lg:py-32">
+      <div className="container grid lg:grid-cols-2 gap-10 sm:gap-12 items-center max-w-7xl">
         <div className="flex flex-col gap-6">
-          <h2 className="text-3xl md:text-4xl font-headline font-bold">
+          <h2 className="text-3xl sm:text-4xl font-headline font-bold">
             Grow Your Local Business with macs11
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -35,7 +35,7 @@ export default function Partners() {
             ))}
           </ul>
           {partnerImage && (
-            <div className="mt-6 rounded-lg overflow-hidden shadow-lg hidden lg:block">
+            <div className="mt-6 rounded-lg overflow-hidden shadow-lg">
               <Image
                 src={partnerImage.imageUrl}
                 alt={partnerImage.description}

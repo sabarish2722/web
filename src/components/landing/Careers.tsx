@@ -88,9 +88,9 @@ export default function Careers() {
   };
 
   return (
-    <section id="careers" className="py-20 md:py-32">
+    <section id="careers" className="py-16 sm:py-20 md:py-24 lg:py-32">
       <div className="container text-center">
-        <h2 className="text-3xl md:text-4xl font-headline font-bold">
+        <h2 className="text-3xl sm:text-4xl font-headline font-bold">
           Join Our Team
         </h2>
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -99,21 +99,8 @@ export default function Careers() {
           our mission.
         </p>
 
-        <div className="mt-12 grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-          {careerImage && (
-            <div className="hidden lg:block rounded-lg overflow-hidden shadow-lg">
-              <Image
-                src={careerImage.imageUrl}
-                alt={careerImage.description}
-                width={600}
-                height={400}
-                className="w-full h-full object-cover"
-                data-ai-hint={careerImage.imageHint}
-              />
-            </div>
-          )}
-
-          <Card className="text-left w-full shadow-lg">
+        <div className="mt-12 grid lg:grid-cols-2 gap-10 sm:gap-12 items-center max-w-7xl mx-auto">
+          <Card className="text-left w-full shadow-lg lg:order-last">
             <CardHeader>
               <CardTitle>Submit Your Application</CardTitle>
               <CardDescription>
@@ -210,6 +197,18 @@ export default function Careers() {
               </div>
             </CardContent>
           </Card>
+          {careerImage && (
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <Image
+                src={careerImage.imageUrl}
+                alt={careerImage.description}
+                width={600}
+                height={400}
+                className="w-full h-full object-cover"
+                data-ai-hint={careerImage.imageHint}
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>

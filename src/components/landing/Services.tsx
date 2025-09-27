@@ -44,10 +44,10 @@ const services: Service[] = [
 
 export default function Services() {
   return (
-    <section id="services" className="py-20 md:py-32 bg-card">
+    <section id="services" className="py-16 sm:py-20 md:py-24 lg:py-32 bg-card">
       <div className="container max-w-7xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-headline font-bold">
+        <div className="text-center mb-10 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-headline font-bold">
             A Service for Every Need
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">

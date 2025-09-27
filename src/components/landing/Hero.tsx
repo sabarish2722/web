@@ -13,7 +13,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="container relative grid lg:grid-cols-2 gap-12 items-center py-20 md:py-32"
+      className="container relative grid lg:grid-cols-2 gap-8 md:gap-12 items-center py-16 sm:py-20 md:py-24 lg:py-32"
     >
       <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#888_1px,transparent_1px)] [background-size:32px_32px]"></div>
       <div className="flex flex-col gap-6 text-center lg:text-left">

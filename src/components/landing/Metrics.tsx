@@ -40,10 +40,10 @@ export default async function Metrics() {
     const metrics = await getMetrics();
 
     return (
-        <section id="metrics" className="py-20 md:py-32">
+        <section id="metrics" className="py-16 sm:py-20 md:py-24 lg:py-32">
             <div className="container max-w-7xl">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-headline font-bold">
+                <div className="text-center mb-10 sm:mb-12">
+                    <h2 className="text-3xl sm:text-4xl font-headline font-bold">
                         The macs11 Difference
                     </h2>
                     <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -60,7 +60,7 @@ export default async function Metrics() {
                         return (
                             <div key={metric.id} className="flex flex-col items-center">
                                 <IconComponent className="w-12 h-12 text-primary mb-4" />
-                                <p className="text-5xl font-bold font-headline">
+                                <p className="text-4xl sm:text-5xl font-bold font-headline">
                                     {metric.value}
                                 </p>
                                 <p className="text-muted-foreground mt-2 text-lg">
