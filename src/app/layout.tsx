@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import WhatsAppButton from "@/components/landing/WhatsAppButton";
 
 export const metadata: Metadata = {
   title: "macs11 - Your City, Simplified",
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
         {children}
+        <WhatsAppButton phoneNumber="8919702207" />
         <Toaster />
       </body>
     </html>
