@@ -79,6 +79,40 @@ export async function submitInvestorForm(data: unknown) {
   }
 }
 
+const contactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters."),
+  email: z.string().email("Invalid email address."),
+  message: z.string().min(10, "Message must be at least 10 characters."),
+});
+
+export async function submitContactForm(data: unknown) {
+  const result = contactSchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: "Invalid form data." };
+  }
+
+  if (!supabaseAdmin) {
+    return { success: false, error: "Backend not configured correctly. Please contact support." };
+  }
+
+  try {
+    const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    
+    return {
+      success: true,
+      message: "Your message has been sent! We will get back to you soon.",
+    };
+  } catch (error) {
+    console.error("Error writing to Supabase: ", error);
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+    return { success: false, error: `Failed to submit form: ${errorMessage}` };
+  }
+}
+
 const suggestionSchema = z.object({
   suggestion: z.string().min(10, "Suggestion must be at least 10 characters."),
 });
