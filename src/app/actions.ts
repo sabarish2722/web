@@ -25,22 +25,18 @@ export async function submitPartnerForm(data: unknown) {
     return { success: false, error: "Backend not configured correctly. Please contact support." };
   }
 
-  try {
-    const { error } = await supabaseAdmin.from("partners").insert([result.data]);
+  const { error } = await supabaseAdmin.from("partners").insert([result.data]);
 
-    if (error) {
-      throw error;
-    }
-    
-    return {
-      success: true,
-      message: "Thank you for your interest! We will be in touch shortly.",
-    };
-  } catch (error) {
-    const supabaseError = error as any;
-    console.error("Error writing to Supabase: ", supabaseError);
-    return { success: false, error: `Failed to submit form: ${supabaseError.message}` };
+  if (error) {
+    console.error("Error writing to Supabase (partners): ", error);
+    // Return the actual error message from Supabase
+    return { success: false, error: `Failed to submit form: ${error.message}` };
   }
+  
+  return {
+    success: true,
+    message: "Thank you for your interest! We will be in touch shortly.",
+  };
 }
 
 const investorSchema = z.object({
@@ -59,22 +55,17 @@ export async function submitInvestorForm(data: unknown) {
     return { success: false, error: "Backend not configured correctly. Please contact support." };
   }
 
-  try {
-    const { error } = await supabaseAdmin.from("investors").insert([result.data]);
+  const { error } = await supabaseAdmin.from("investors").insert([result.data]);
 
-    if (error) {
-      throw error;
-    }
-
-    return {
-      success: true,
-      message: "Thank you! You will receive the investor deck shortly.",
-    };
-  } catch (error) {
-    const supabaseError = error as any;
-    console.error("Error writing to Supabase: ", supabaseError);
-    return { success: false, error: `Failed to submit form: ${supabaseError.message}` };
+  if (error) {
+    console.error("Error writing to Supabase (investors): ", error);
+    return { success: false, error: `Failed to submit form: ${error.message}` };
   }
+
+  return {
+    success: true,
+    message: "Thank you! You will receive the investor deck shortly.",
+  };
 }
 
 const contactSchema = z.object({
@@ -92,23 +83,19 @@ export async function submitContactForm(data: unknown) {
   if (!supabaseAdmin) {
     return { success: false, error: "Backend not configured correctly. Please contact support." };
   }
+  
+  const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
 
-  try {
-    const { error } = await supabaseAdmin.from("contactSubmissions").insert([result.data]);
-
-    if (error) {
-      throw error;
-    }
-    
-    return {
-      success: true,
-      message: "Your message has been sent! We will get back to you soon.",
-    };
-  } catch (error) {
-    const supabaseError = error as any;
-    console.error("Error writing to Supabase: ", supabaseError);
-    return { success: false, error: `Failed to submit form: ${supabaseError.message}` };
+  if (error) {
+      console.error("Error writing to Supabase (contact): ", error);
+      // Return the actual error message from Supabase
+      return { success: false, error: `Failed to submit form: ${error.message}` };
   }
+  
+  return {
+    success: true,
+    message: "Your message has been sent! We will get back to you soon.",
+  };
 }
 
 
@@ -121,7 +108,6 @@ export async function getVisitorCount() {
     const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
 
     if (error) {
-      // Log the error but don't crash the app
       console.error("Error calling RPC to increment visitor count:", error.message);
       return 0;
     }
@@ -187,4 +173,3 @@ export async function uploadResume(formData: FormData) {
       return { success: false, error: `Upload failed: ${supabaseError.message}` };
     }
   }
-
