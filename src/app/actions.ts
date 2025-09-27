@@ -146,11 +146,25 @@ export async function submitSuggestionForm(data: unknown) {
   }
 }
 
+const resumeSchema = z.object({
+  name: z.string().min(2, "Name is required."),
+  mobile: z.string().min(10, "A valid mobile number is required.").optional().or(z.literal('')),
+});
+
 export async function uploadResume(formData: FormData) {
   try {
     if (!supabaseAdmin) {
         return { success: false, error: "Supabase admin client is not initialized. Check server environment variables." };
     }
+
+    const name = formData.get("name") as string;
+    const mobile = formData.get("mobile") as string;
+    const result = resumeSchema.safeParse({ name, mobile });
+
+    if (!result.success) {
+      return { success: false, error: "Invalid name or mobile number." };
+    }
+
     const file = formData.get("resume") as File | null;
 
     if (!file) {
@@ -181,6 +195,8 @@ export async function uploadResume(formData: FormData) {
       file_path: filePath,
       original_filename: file.name,
       file_size: file.size,
+      name: result.data.name,
+      mobile: result.data.mobile,
     });
 
     if (dbError) {
@@ -195,4 +211,20 @@ export async function uploadResume(formData: FormData) {
     console.error("Unexpected error in uploadResume:", e);
     return { success: false, error: `An unexpected error occurred: ${e.message}` };
   }
+}
+
+
+export async function getAndIncrementVisitorCount(): Promise<number> {
+  if (!supabaseAdmin) {
+    console.error('Supabase client not initialized');
+    // Return a default or error value
+    return -1;
+  }
+  const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
+  if (error) {
+    console.error('Error incrementing visitor count:', error);
+    // Return a default or error value
+    return -1;
+  }
+  return data;
 }

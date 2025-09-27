@@ -1,57 +1,60 @@
--- This script initializes the database schema for the macs11 application.
--- To use it, navigate to the SQL Editor in your Supabase dashboard,
--- paste the entire content of this file, and click "Run".
 
--- Drop existing tables and functions to ensure a clean slate.
--- Use "CASCADE" to remove dependent objects.
-DROP FUNCTION IF EXISTS increment_visitor_count();
-DROP TABLE IF EXISTS resumes;
-DROP TABLE IF EXISTS counters;
-DROP TABLE IF EXISTS investors;
-DROP TABLE IF EXISTS contactSubmissions;
-DROP TABLE IF EXISTS partners;
+-- Create a trigger function to handle new user sign-ups
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email)
+  VALUES (new.id, new.email);
+  RETURN new;
+END;
+$$;
 
+-- Create a trigger to call the function when a new user is created
+CREATE OR REPLACE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
--- Create the table for partner submissions
+-- Create the partners table
 CREATE TABLE partners (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     businessName TEXT NOT NULL,
     email TEXT NOT NULL,
     phone TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
 );
-COMMENT ON TABLE partners IS 'Stores submissions from the "Become a Partner" form.';
+COMMENT ON TABLE partners IS 'Contains submissions from the partner form.';
 
--- Create the table for contact form submissions
-CREATE TABLE contactSubmissions (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-COMMENT ON TABLE contactSubmissions IS 'Stores submissions from the "Get In Touch" form.';
-
--- Create the table for investor submissions
+-- Create the investors table
 CREATE TABLE investors (
-    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     company TEXT NOT NULL,
     email TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
 );
-COMMENT ON TABLE investors IS 'Stores submissions from the investor deck request form.';
+COMMENT ON TABLE investors IS 'Contains submissions from the investor form for deck access.';
 
--- Create the table for resumes
-CREATE TABLE resumes (
-  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  file_path TEXT NOT NULL,
-  original_filename TEXT,
-  file_size BIGINT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+-- Create the table for contact form submissions
+CREATE TABLE contactSubmissions (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    message TEXT NOT NULL,
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
 );
-COMMENT ON TABLE resumes IS 'Stores metadata for uploaded resume files.';
+COMMENT ON TABLE contactSubmissions IS 'Stores messages sent through the contact form.';
+
+-- Create the suggestions table
+CREATE TABLE suggestions (
+    id SERIAL PRIMARY KEY,
+    suggestion TEXT NOT NULL,
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
+);
+COMMENT ON TABLE suggestions IS 'Collects user suggestions for the platform.';
 
 -- Create the table for the visitor counter
 CREATE TABLE counters (
@@ -87,18 +90,45 @@ END;
 $$;
 COMMENT ON FUNCTION increment_visitor_count IS 'Atomically increments the visitor counter and returns the new value.';
 
+-- Create the resumes table with new fields for name and mobile
+CREATE TABLE resumes (
+    id SERIAL PRIMARY KEY,
+    file_path TEXT NOT NULL,
+    original_filename TEXT NOT NULL,
+    file_size BIGINT NOT NULL,
+    name TEXT NOT NULL, 
+    mobile TEXT,       
+    uploaded_at TIMESTAMPTZ DEFAULT NOW()
+);
+COMMENT ON TABLE resumes IS 'Stores information about uploaded resumes, including applicant name and mobile.';
 
--- Enable Row Level Security (RLS) for all tables
+-- RLS Policies
+-- Make profiles public
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public profiles are viewable by everyone." ON profiles
+  FOR SELECT USING (true);
+CREATE POLICY "Users can insert their own profile." ON profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+CREATE POLICY "Users can update own profile." ON profiles
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Secure other tables by default
 ALTER TABLE partners ENABLE ROW LEVEL SECURITY;
-ALTER TABLE contactSubmissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE investors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contactSubmissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE suggestions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE resumes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE counters ENABLE ROW LEVEL SECURITY;
 
--- Create policies to allow service_role to perform all actions
--- This is secure because only your server (using the service_role_key) can bypass RLS.
--- The public 'anon' key used on the client-side will be blocked.
+-- Define access policies for each table
+-- Allow full access to service_role for all tables
 CREATE POLICY "Allow full access for service_role" ON partners
+FOR ALL
+TO service_role
+USING (true)
+WITH CHECK (true);
+
+CREATE POLICY "Allow full access for service_role" ON investors
 FOR ALL
 TO service_role
 USING (true)
@@ -110,7 +140,7 @@ TO service_role
 USING (true)
 WITH CHECK (true);
 
-CREATE POLICY "Allow full access for service_role" ON investors
+CREATE POLICY "Allow full access for service_role" ON suggestions
 FOR ALL
 TO service_role
 USING (true)
