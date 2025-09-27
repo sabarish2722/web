@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-app-screen",
+      "description": "A screenshot of the macs11 mobile app interface displayed on a smartphone.",
+      "imageUrl": "https://images.unsplash.com/photo-1658953229625-aad99d7603b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcHAlMjBpbnRlcmZhY2V8ZW58MHx8fHwxNzU4OTE4OTEwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "app interface"
+    },
+    {
+      "id": "partner-image",
+      "description": "An image of a smiling local business owner in their shop.",
+      "imageUrl": "https://images.unsplash.com/photo-1556741533-6e6a62bd8b49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxsb2NhbCUyMGJ1c2luZXNzfGVufDB8fHx8MTc1ODk0MzkwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "local business"
+    },
+    {
+      "id": "investor-image",
+      "description": "A professional image representing financial growth and investment, like a modern city skyline.",
+      "imageUrl": "https://images.unsplash.com/photo-1534298261662-f8fdd25317db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjaXR5JTIwc2t5bGluZXxlbnwwfHx8fDE3NTg5MjAwMzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "city skyline"
+    },
+    {
+      "id": "about-us-image",
+      "description": "A diverse team collaborating in a modern office space.",
+      "imageUrl": "https://images.unsplash.com/photo-1543269865-cbf427effbad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx0ZWFtJTIwY29sbGFib3JhdGlvbnxlbnwwfHx8fDE3NTg5MDg0Mzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "team collaboration"
+    }
+  ]
 }
