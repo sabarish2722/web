@@ -113,60 +113,37 @@ export async function submitContactForm(data: unknown) {
 
 export async function getVisitorCount() {
   if (!supabaseAdmin) {
-      console.error("Supabase admin client not initialized.");
-      // Return a non-null value to avoid breaking the UI
-      return 0; 
+    console.error("Supabase admin client not initialized. Cannot fetch visitor count.");
+    return 0;
   }
   try {
-    // Step 1: Select the current count.
-    const { data: selectData, error: selectError } = await supabaseAdmin
-      .from('counters')
-      .select('value')
-      .eq('name', 'visitors')
-      .single();
+    const { data, error, count } = await supabaseAdmin.rpc('increment_visitor_count');
 
-    // If the row doesn't exist (e.g., first time running)
-    if (selectError && selectError.code === 'PGRST116') {
-      // Insert the first count and return it.
-      const { data: insertData, error: insertError } = await supabaseAdmin
+    if (error) {
+      // Log the error but don't crash the app
+      console.error("Error calling RPC to increment visitor count:", error.message);
+      // Try to fetch the current count as a fallback
+      const { data: fallbackData, error: fallbackError } = await supabaseAdmin
         .from('counters')
-        .insert({ name: 'visitors', value: 1 })
         .select('value')
+        .eq('name', 'visitors')
         .single();
       
-      if (insertError) {
-        console.error("Error inserting initial visitor count:", insertError.message);
-        return 1;
-      }
-      return insertData?.value ?? 1;
-    }
-    
-    // If there was a different selection error
-    if (selectError) {
-        console.error("Error fetching visitor count:", selectError.message);
+      if (fallbackError) {
+        console.error("Error fetching fallback visitor count:", fallbackError.message);
         return 0;
-    }
-    
-    // Step 2: Increment the count.
-    const newCount = (selectData.value || 0) + 1;
-    
-    // Step 3: Update the count in the database.
-    const { error: updateError } = await supabaseAdmin
-      .from('counters')
-      .update({ value: newCount })
-      .eq('name', 'visitors');
-
-    if (updateError) {
-      console.error("Error updating visitor count:", updateError.message);
-      // Return the count we fetched, even if update failed.
-      return newCount - 1;
+      }
+      return fallbackData?.value ?? 0;
     }
 
-    // Step 4: Return the new count.
-    return newCount;
+    return data ?? 0;
 
   } catch (error) {
-    console.error("An unexpected error occurred in getVisitorCount:", error);
+    if (error instanceof TypeError && error.message.includes('fetch failed')) {
+      console.error("Network error: Failed to connect to Supabase to get visitor count. Please check server connectivity.", error);
+    } else {
+      console.error("An unexpected error occurred in getVisitorCount:", error);
+    }
     return 0;
   }
 }
