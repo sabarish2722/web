@@ -121,22 +121,58 @@ export async function submitContactForm(data: unknown) {
 
 export async function getVisitorCount() {
     try {
-      // This RPC call will safely increment the counter and return the new value.
-      const { data, error } = await supabase.rpc('increment_visitor_count');
+      // Step 1: Select the current count.
+      const { data: selectData, error: selectError } = await supabase
+        .from('counters')
+        .select('value')
+        .eq('name', 'visitors')
+        .single();
   
-      if (error) {
-        // This will now properly log if the function is missing, etc.
-        console.error("Error fetching visitor count:", error.message);
-        return null;
+      // If the row doesn't exist (e.g., first time running)
+      if (selectError && selectError.code === 'PGRST116') {
+        // Insert the first count and return it.
+        const { data: insertData, error: insertError } = await supabase
+          .from('counters')
+          .insert({ name: 'visitors', value: 1 })
+          .select('value')
+          .single();
+        
+        if (insertError) {
+          console.error("Error inserting initial visitor count:", insertError.message);
+          return null;
+        }
+        return insertData?.value ?? 1;
+      }
+      
+      // If there was a different selection error
+      if (selectError) {
+          console.error("Error fetching visitor count:", selectError.message);
+          return null;
+      }
+      
+      // Step 2: Increment the count.
+      const newCount = (selectData.value || 0) + 1;
+      
+      // Step 3: Update the count in the database.
+      const { error: updateError } = await supabase
+        .from('counters')
+        .update({ value: newCount })
+        .eq('name', 'visitors');
+  
+      if (updateError) {
+        console.error("Error updating visitor count:", updateError.message);
+        // Return the count we fetched, even if update failed.
+        return newCount - 1;
       }
   
-      return data;
+      // Step 4: Return the new count.
+      return newCount;
   
     } catch (error) {
       console.error("An unexpected error occurred in getVisitorCount:", error);
       return null;
     }
-  }
+}
 
 export async function uploadResume(formData: FormData) {
     const file = formData.get("resume") as File | null;
