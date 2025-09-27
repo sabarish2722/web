@@ -75,9 +75,13 @@ export async function submitInvestorForm(data: unknown) {
   if (!result.success) {
     return { success: false, error: "Invalid form data." };
   }
+  
+  if (!supabaseAdmin) {
+    return { success: false, error: "Backend not configured correctly. Please contact support." };
+  }
 
   try {
-    const { error } = await supabase.from("investors").insert([result.data]);
+    const { error } = await supabaseAdmin.from("investors").insert([result.data]);
 
     if (error) {
       throw new Error(error.message);
