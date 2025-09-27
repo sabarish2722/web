@@ -1,25 +1,9 @@
 
 "use server";
 
-import {
-  generateWebsiteContent,
-  type GenerateWebsiteContentInput,
-} from "@/ai/flows/ai-headline-generation";
 import { z } from "zod";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-
-export async function handleGenerateContent(input: GenerateWebsiteContentInput) {
-  try {
-    const result = await generateWebsiteContent(input);
-    return { success: true, data: result };
-  } catch (error) {
-    console.error(error);
-    const errorMessage =
-      error instanceof Error ? error.message : "An unknown error occurred.";
-    return { success: false, error: `Failed to generate content: ${errorMessage}` };
-  }
-}
 
 const partnerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),

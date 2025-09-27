@@ -1,4 +1,4 @@
-import AiContentGenerator from "@/components/landing/AiContentGenerator";
+
 import Careers from "@/components/landing/Careers";
 import Footer from "@/components/landing/Footer";
 import Header from "@/components/landing/Header";
@@ -21,7 +21,6 @@ export default function Home() {
         <Partners />
         <Investors />
         <Careers />
-        <AiContentGenerator />
       </main>
       <Footer />
     </div>
