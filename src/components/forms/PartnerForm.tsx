@@ -32,11 +32,13 @@ const formSchema = z.object({
   phone: z.string().min(10, "Phone number must be at least 10 digits.").optional(),
 });
 
+type PartnerFormValues = z.infer<typeof formSchema>;
+
 export default function PartnerForm() {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<PartnerFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -46,7 +48,7 @@ export default function PartnerForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = (values: PartnerFormValues) => {
     startTransition(async () => {
       const result = await submitPartnerForm(values);
       if (result.success) {
@@ -63,7 +65,7 @@ export default function PartnerForm() {
         });
       }
     });
-  }
+  };
 
   return (
     <Card className="w-full max-w-lg mx-auto shadow-2xl shadow-primary/10">

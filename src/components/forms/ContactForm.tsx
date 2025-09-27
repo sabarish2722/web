@@ -24,11 +24,13 @@ const formSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters."),
 });
 
+type ContactFormValues = z.infer<typeof formSchema>;
+
 export default function ContactForm() {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<ContactFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -37,7 +39,7 @@ export default function ContactForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = (values: ContactFormValues) => {
     startTransition(async () => {
       const result = await submitContactForm(values);
 
@@ -55,7 +57,7 @@ export default function ContactForm() {
         });
       }
     });
-  }
+  };
 
   return (
     <Form {...form}>

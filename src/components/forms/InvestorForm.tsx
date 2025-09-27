@@ -23,6 +23,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
+import { submitInvestorForm } from "@/app/actions";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -30,11 +31,13 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address."),
 });
 
+type InvestorFormValues = z.infer<typeof formSchema>;
+
 export default function InvestorForm() {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<InvestorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -43,16 +46,14 @@ export default function InvestorForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    startTransition(() => {
-      // const result = await submitInvestorForm(values);
-      console.log("Investor form submission is disabled.");
-      const result = { success: false, error: "This form is not active." };
+  const onSubmit = (values: InvestorFormValues) => {
+    startTransition(async () => {
+      const result = await submitInvestorForm(values);
 
       if (result.success) {
         toast({
           title: "Request Sent!",
-          description: "Thank you for your interest!",
+          description: result.message,
         });
         form.reset();
       } else {
@@ -63,7 +64,7 @@ export default function InvestorForm() {
         });
       }
     });
-  }
+  };
 
   return (
     <Card className="w-full max-w-lg mx-auto shadow-2xl shadow-primary/10">
