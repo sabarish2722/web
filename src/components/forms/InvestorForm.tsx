@@ -21,8 +21,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
+import { submitInvestorForm } from "@/app/actions";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -30,11 +31,13 @@ const formSchema = z.object({
   email: z.string().email("Invalid email address."),
 });
 
+type InvestorFormValues = z.infer<typeof formSchema>;
+
 export default function InvestorForm() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<InvestorFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -43,27 +46,25 @@ export default function InvestorForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    // const result = await submitInvestorForm(values);
-    console.log("Investor form submission is disabled.");
-    const result = { success: false, error: "This form is not active." };
-    setIsSubmitting(false);
+  const onSubmit = (values: InvestorFormValues) => {
+    startTransition(async () => {
+      const result = await submitInvestorForm(values);
 
-    if (result.success) {
-      toast({
-        title: "Request Sent!",
-        description: "Thank you for your interest!",
-      });
-      form.reset();
-    } else {
-      toast({
-        title: "Request Failed",
-        description: result.error,
-        variant: "destructive",
-      });
-    }
-  }
+      if (result.success) {
+        toast({
+          title: "Request Sent!",
+          description: result.message,
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Request Failed",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
+    });
+  };
 
   return (
     <Card className="w-full max-w-lg mx-auto shadow-2xl shadow-primary/10">
@@ -120,9 +121,9 @@ export default function InvestorForm() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Request Deck
             </Button>
           </form>

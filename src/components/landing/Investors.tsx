@@ -1,9 +1,6 @@
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { WhatsAppIcon } from "./WhatsAppButton";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import InvestorForm from "../forms/InvestorForm";
 
 export default function Investors() {
   const investorImage = PlaceHolderImages.find(
@@ -11,30 +8,13 @@ export default function Investors() {
   );
 
   return (
-    <section id="investors" className="py-20 md:py-32 bg-card">
-      <div className="container grid lg:grid-cols-2 gap-12 items-center max-w-7xl">
+    <section id="investors" className="py-16 sm:py-20 md:py-24 lg:py-32 bg-card">
+      <div className="container grid lg:grid-cols-2 gap-10 sm:gap-12 items-center max-w-7xl">
         <div className="w-full">
-        <Card className="w-full max-w-lg mx-auto shadow-2xl shadow-primary/10">
-            <CardHeader>
-                <CardTitle className="font-headline text-2xl text-primary">
-                Join Our Investor Community
-                </CardTitle>
-                <CardDescription>
-                Connect with us directly on WhatsApp to get our investor deck and stay updated on our journey.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white" asChild>
-                    <Link href="https://chat.whatsapp.com/D2Nr5hltsF468baNYBn9Wf?mode=ems_share_t" target="_blank">
-                        <WhatsAppIcon />
-                        Join Investor WhatsApp Group
-                    </Link>
-                </Button>
-            </CardContent>
-         </Card>
+          <InvestorForm />
         </div>
         <div className="flex flex-col gap-6 lg:order-first">
-          <h2 className="text-3xl md:text-4xl font-headline font-bold">
+          <h2 className="text-3xl sm:text-4xl font-headline font-bold">
             Invest in the Future of Local Commerce
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -43,7 +23,7 @@ export default function Investors() {
             delivers unparalleled convenience to millions of users.
           </p>
           {investorImage && (
-            <div className="mt-6 rounded-lg overflow-hidden shadow-lg hidden lg:block">
+            <div className="mt-6 rounded-lg overflow-hidden shadow-lg">
               <Image
                 src={investorImage.imageUrl}
                 alt={investorImage.description}

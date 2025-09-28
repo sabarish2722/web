@@ -1,7 +1,8 @@
 
 import Link from "next/link";
-import { Twitter, Linkedin, Facebook, Mail, Phone, Globe } from "lucide-react";
-import ContactForm from "../forms/ContactForm";
+import { Twitter, Linkedin, Facebook, Mail, Phone, MessageSquarePlus } from "lucide-react";
+import SuggestionForm from "../forms/SuggestionForm";
+import VisitorCounter from "../visitor-counter";
 
 const socialLinks = [
   { icon: Twitter, href: "#", name: "Twitter" },
@@ -24,24 +25,9 @@ export default function Footer() {
             <Logo />
           </Link>
           <p className="text-muted-foreground">
-            Your city, simplified. Fast, trusted hyperlocal services at your
-            fingertips.
+            Have questions or suggestions? We'd love to hear from you.
           </p>
-          <div className="flex flex-col gap-2 mt-2 text-muted-foreground">
-             <a href="mailto:ceo@macs11.com" className="flex items-center gap-2 hover:text-primary">
-                <Mail className="w-5 h-5" />
-                <span>ceo@macs11.com</span>
-             </a>
-             <a href="tel:8919702207" className="flex items-center gap-2 hover:text-primary">
-                <Phone className="w-5 h-5" />
-                <span>8919702207</span>
-             </a>
-             <a href="https://macs11.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary">
-                <Globe className="w-5 h-5" />
-                <span>macs11.com</span>
-             </a>
-          </div>
-          <div className="flex gap-4 mt-2">
+           <div className="flex gap-4 mt-2">
             {socialLinks.map((link) => (
               <a
                 key={link.name}
@@ -54,14 +40,24 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        <div className="lg:col-span-2">
-          <h3 className="text-2xl font-headline font-semibold mb-4">
-            Get In Touch
+        <div className="p-6 bg-background rounded-lg shadow-lg border border-primary/20">
+          <h3 className="text-2xl font-headline font-semibold mb-4 flex items-center gap-3 text-primary">
+            <MessageSquarePlus />
+            Leave a Suggestion
           </h3>
-          <p className="text-muted-foreground mb-6">
-            Have a question or want to work with us? Drop us a line.
-          </p>
-          <ContactForm />
+          <SuggestionForm />
+        </div>
+         <div className="flex flex-col gap-4">
+          <h3 className="text-2xl font-headline font-semibold text-primary">Get in Touch</h3>
+           <div className="p-4 rounded-lg border bg-background text-center">
+            <p className="text-lg font-semibold text-foreground">
+              Your feedback drives our progress.
+            </p>
+            <p className="text-muted-foreground mt-1">Let us know what you think!</p>
+          </div>
+           <div className="mt-4">
+              <VisitorCounter />
+            </div>
         </div>
       </div>
       <div className="container max-w-7xl mt-12 pt-8 border-t">
