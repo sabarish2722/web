@@ -116,6 +116,7 @@ export async function submitContactForm(data: unknown) {
 }
 
 const suggestionSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters."),
   suggestion: z.string().min(10, "Suggestion must be at least 10 characters."),
 });
 
@@ -156,7 +157,7 @@ const resumeSchema = z.object({
 export async function uploadResume(formData: FormData) {
   try {
     if (!supabaseAdmin) {
-        return { success: false, error: "Supabase admin client is not initialized. Check server environment variables." };
+        throw new Error("Supabase admin client is not initialized. Check server environment variables.");
     }
 
     const name = formData.get("name") as string;

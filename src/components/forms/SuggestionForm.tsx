@@ -10,8 +10,10 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitSuggestionForm } from "@/app/actions";
@@ -19,6 +21,7 @@ import { useTransition } from "react";
 import { Loader2, Send } from "lucide-react";
 
 const formSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters."),
   suggestion: z.string().min(10, "Suggestion must be at least 10 characters."),
 });
 
@@ -31,6 +34,7 @@ export default function SuggestionForm() {
   const form = useForm<SuggestionFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       suggestion: "",
     },
   });
@@ -60,11 +64,25 @@ export default function SuggestionForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Your Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="suggestion"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Suggestion</FormLabel>
               <FormControl>
-                <Textarea placeholder="Tell us what you think..." {...field} rows={4} />
+                <Textarea placeholder="Tell us what you think..." {...field} rows={3} />
               </FormControl>
               <FormMessage />
             </FormItem>
