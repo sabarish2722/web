@@ -40,15 +40,15 @@ async function getYouTubeVideoId(): Promise<string> {
             .from('youtube_videos')
             .select('video_url')
             .order('created_at', { ascending: false })
-            .limit(1)
-            .single();
+            .limit(1);
 
         if (error) {
             console.error("Error fetching YouTube video URL:", error.message);
             return fallbackVideoId;
         }
 
-        const videoId = data?.video_url ? getYouTubeID(data.video_url) : null;
+        const videoUrl = data?.[0]?.video_url;
+        const videoId = videoUrl ? getYouTubeID(videoUrl) : null;
         
         return videoId || fallbackVideoId;
 
