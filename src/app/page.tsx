@@ -11,7 +11,7 @@ import YouTubePlayer from "@/components/landing/YouTubePlayer";
 import { supabaseAdmin } from "@/lib/supabase";
 
 async function getYouTubeVideoId(): Promise<string> {
-    const fallbackVideoId = "dQw4w9WgXcQ"; // Rick Astley - Never Gonna Give You Up
+    const fallbackVideoId = "Ht8K2hhX7Io"; 
 
     if (!supabaseAdmin) {
         console.warn("Supabase admin client not initialized. Falling back to default YouTube video.");
@@ -70,4 +70,3 @@ export default async function Home() {
     </main>
   );
 }
-
