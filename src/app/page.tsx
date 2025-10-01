@@ -10,6 +10,23 @@ import Mission from "@/components/landing/Mission";
 import YouTubePlayer from "@/components/landing/YouTubePlayer";
 import { supabaseAdmin } from "@/lib/supabase";
 
+function getYouTubeID(url: string): string | null {
+    if (!url) return null;
+    try {
+        const urlObj = new URL(url);
+        if (urlObj.hostname === 'youtu.be') {
+            return urlObj.pathname.slice(1);
+        }
+        if (urlObj.hostname === 'www.youtube.com' || urlObj.hostname === 'youtube.com') {
+            return urlObj.searchParams.get('v');
+        }
+    } catch (e) {
+        console.error("Could not parse URL:", url, e);
+        return null;
+    }
+    return null;
+}
+
 async function getYouTubeVideoId(): Promise<string> {
     const fallbackVideoId = "Ht8K2hhX7Io"; 
 
@@ -20,17 +37,21 @@ async function getYouTubeVideoId(): Promise<string> {
 
     try {
         const { data, error } = await supabaseAdmin
-            .from('site_content')
-            .select('value')
-            .eq('key', 'youtube_video_id')
+            .from('youtube_videos')
+            .select('video_url')
+            .order('created_at', { ascending: false })
+            .limit(1)
             .single();
 
         if (error) {
-            console.error("Error fetching YouTube video ID:", error.message);
+            console.error("Error fetching YouTube video URL:", error.message);
             return fallbackVideoId;
         }
 
-        return data?.value || fallbackVideoId;
+        const videoId = data?.video_url ? getYouTubeID(data.video_url) : null;
+        
+        return videoId || fallbackVideoId;
+
     } catch (e: unknown) {
         const errorMessage = e instanceof Error ? e.message : "An unknown error occurred.";
         console.error('An unexpected error occurred while fetching YouTube video ID:', errorMessage);
