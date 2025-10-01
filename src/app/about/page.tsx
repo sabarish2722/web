@@ -107,8 +107,8 @@ export default async function AboutPage() {
                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8">
                         {teamMembers.map((member) => (
                             <div key={member.id} className="text-center">
-                                <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
-                                  <Image src={member.image_url || `https://picsum.photos/seed/${member.name.replace(/\s/g, '')}/100/100`} alt={member.name} width={100} height={100} className="rounded-full" />
+                                <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                                  <Image src={member.image_url || `https://picsum.photos/seed/${member.name.replace(/\s/g, '')}/100/100`} alt={member.name} width={100} height={100} className="rounded-full object-cover" />
                                 </div>
                                 <h3 className="font-semibold">{member.name}</h3>
                                 <p className="text-sm text-muted-foreground">{member.role}</p>

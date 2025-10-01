@@ -216,16 +216,20 @@ export async function uploadResume(formData: FormData) {
   }
 }
 
-
 export async function getAndIncrementVisitorCount(): Promise<number> {
   if (!supabaseAdmin) {
-    console.error('Supabase admin client not initialized. Cannot increment visitor count.');
+    console.warn('Supabase admin client not initialized. Cannot fetch visitor count.');
     return -1;
   }
-  const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
-  if (error) {
-    console.error('Error incrementing visitor count:', error);
-    return -1;
+  try {
+    const { data, error } = await supabaseAdmin.rpc('increment_visitor_count');
+    if (error) {
+      console.error('Error in getAndIncrementVisitorCount:', error.message);
+      return -1; 
+    }
+    return data;
+  } catch(e) {
+     console.error('Unexpected error in getAndIncrementVisitorCount:', e);
+     return -1;
   }
-  return data;
 }

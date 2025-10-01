@@ -47,17 +47,17 @@ const ResumeUploadForm = () => {
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="name" className="block text-sm font-medium text-gray-300">Full Name</Label>
+        <Label htmlFor="name" className="block text-sm font-medium">Full Name</Label>
         <Input type="text" id="name" name="name" required className="mt-1 block w-full" />
       </div>
       <div>
-        <Label htmlFor="mobile" className="block text-sm font-medium text-gray-300">Mobile Number (Optional)</Label>
+        <Label htmlFor="mobile" className="block text-sm font-medium">Mobile Number (Optional)</Label>
         <Input type="tel" id="mobile" name="mobile" className="mt-1 block w-full" />
       </div>
       <div>
-        <Label htmlFor="resume" className="block text-sm font-medium text-gray-300">Upload Resume</Label>
+        <Label htmlFor="resume" className="block text-sm font-medium">Upload Resume</Label>
         <Input type="file" id="resume" name="resume" required accept=".pdf,.doc,.docx" className="mt-1 block w-full" />
-        <p className="mt-1 text-sm text-gray-500">PDF or Word document, up to 5MB.</p>
+        <p className="mt-1 text-sm text-muted-foreground">PDF or Word document, up to 5MB.</p>
       </div>
       <Button type="submit" disabled={isSubmitting} className="w-full">
         {isSubmitting ? 'Submitting...' : 'Submit Application'}
