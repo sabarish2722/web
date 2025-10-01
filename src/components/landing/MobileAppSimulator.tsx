@@ -1,13 +1,17 @@
+
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import type React from "react";
 
 interface MobileAppSimulatorProps {
-  children: React.ReactNode;
+  imageUrl: string;
+  imageAlt?: string;
   className?: string;
 }
 
 export default function MobileAppSimulator({
-  children,
+  imageUrl,
+  imageAlt = "App Screenshot",
   className,
 }: MobileAppSimulatorProps) {
   return (
@@ -21,8 +25,13 @@ export default function MobileAppSimulator({
       <div className="h-[46px] w-[3px] bg-muted absolute -left-[15px] top-[124px] rounded-l-lg"></div>
       <div className="h-[46px] w-[3px] bg-muted absolute -left-[15px] top-[178px] rounded-l-lg"></div>
       <div className="h-[64px] w-[3px] bg-muted absolute -right-[15px] top-[142px] rounded-r-lg"></div>
-      <div className="rounded-[2rem] overflow-hidden w-full h-full bg-background">
-        {children}
+      <div className="rounded-[2rem] overflow-hidden w-full h-full bg-background relative">
+        <Image
+            src={imageUrl}
+            alt={imageAlt}
+            fill
+            className="object-cover"
+        />
       </div>
     </div>
   );
