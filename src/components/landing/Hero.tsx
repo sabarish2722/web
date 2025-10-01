@@ -4,6 +4,7 @@ import Link from "next/link";
 import MobileAppSimulator from "./MobileAppSimulator";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import Image from "next/image";
+import AdBanner from "@/components/ads/AdBanner";
 
 export default function Hero() {
   const appScreenImage = PlaceHolderImages.find(
@@ -11,47 +12,34 @@ export default function Hero() {
   );
 
   return (
-    <section
-      id="hero"
-      className="container relative grid lg:grid-cols-2 gap-8 md:gap-12 items-center py-16 sm:py-20 md:py-24 lg:py-32"
-    >
-      <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#888_1px,transparent_1px)] [background-size:32px_32px]"></div>
-      <div className="flex flex-col gap-6 text-center lg:text-left">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tighter leading-tight">
-          Your City, Simplified.
-          <br />
-          <span className="text-primary">Fast. Trusted.</span>
-        </h1>
-        <p className="max-w-2xl text-lg text-muted-foreground mx-auto lg:mx-0">
-          macs11 is India's hyperlocal platform for daily essentials, fitness,
-          shopping, and tech services. Everything you need, delivered right to
-          your doorstep.
-        </p>
-        <div
-          id="download"
-          className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-        >
-          <Button asChild size="lg">
-            <Link href="#">App Coming Soon</Link>
-          </Button>
-          <Button asChild size="lg" variant="ghost">
-            <Link href="#partners">Partner With Us</Link>
-          </Button>
+    <section className="py-12 sm:py-16 lg:py-20">
+      <div className="container">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="text-center lg:text-left">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-headline tracking-tight">
+              Your City, Simplified. <br />
+              <span className="text-primary">Fast. Trusted.</span>
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground sm:text-xl max-w-xl mx-auto lg:mx-0">
+              macs11 is your all-in-one platform for daily essentials,
+              fitness, shopping, and tech services. We connect you with trusted
+              local businesses to make life easier.
+            </p>
+            <div className="mt-8 flex gap-4 justify-center lg:justify-start">
+              <Button size="lg" asChild>
+                <Link href="#services">Explore Services</Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="#partners">Become a Partner</Link>
+              </Button>
+            </div>
+          </div>
+          {appScreenImage && (
+            <div className="flex justify-center">
+              <MobileAppSimulator imageUrl={appScreenImage.imageUrl} />
+            </div>
+          )}
         </div>
-      </div>
-      <div className="relative flex justify-center">
-        {appScreenImage && (
-          <MobileAppSimulator>
-            <Image
-              src={appScreenImage.imageUrl}
-              alt={appScreenImage.description}
-              width={300}
-              height={600}
-              data-ai-hint={appScreenImage.imageHint}
-              className="object-cover w-full h-full"
-            />
-          </MobileAppSimulator>
-        )}
       </div>
     </section>
   );
