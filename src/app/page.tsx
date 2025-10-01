@@ -31,8 +31,9 @@ async function getYouTubeVideoId(): Promise<string> {
         }
 
         return data?.value || fallbackVideoId;
-    } catch (e) {
-        console.error('An unexpected error occurred while fetching YouTube video ID:', e);
+    } catch (e: unknown) {
+        const errorMessage = e instanceof Error ? e.message : "An unknown error occurred.";
+        console.error('An unexpected error occurred while fetching YouTube video ID:', errorMessage);
         return fallbackVideoId;
     }
 }
@@ -69,3 +70,4 @@ export default async function Home() {
     </main>
   );
 }
+
