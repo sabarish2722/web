@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 const GA_MEASUREMENT_ID = "G-BY186VXK57";
-const ADSENSE_PUBLISHER_ID = "ca-pub-YOUR_PUBLISHER_ID"; // Replace with your AdSense Publisher ID
+const ADSENSE_PUBLISHER_ID = "ca-pub-3223413296044209";
 
 export default function RootLayout({
   children,

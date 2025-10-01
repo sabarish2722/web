@@ -23,7 +23,7 @@ const AdBanner = () => {
             <ins
                 className="adsbygoogle"
                 style={{ display: 'block' }}
-                data-ad-client="ca-pub-YOUR_PUBLISHER_ID" // Replace with your AdSense Publisher ID
+                data-ad-client="ca-pub-3223413296044209"
                 data-ad-slot="YOUR_AD_SLOT_ID"       // Replace with your Ad Slot ID
                 data-ad-format="auto"
                 data-full-width-responsive="true"
