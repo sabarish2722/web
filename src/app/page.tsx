@@ -8,8 +8,39 @@ import Investors from "@/components/landing/Investors";
 import Metrics from "@/components/landing/Metrics";
 import Mission from "@/components/landing/Mission";
 import YouTubePlayer from "@/components/landing/YouTubePlayer";
+import { supabaseAdmin } from "@/lib/supabase";
 
-export default function Home() {
+async function getYouTubeVideoId(): Promise<string> {
+    const fallbackVideoId = "dQw4w9WgXcQ"; // Rick Astley - Never Gonna Give You Up
+
+    if (!supabaseAdmin) {
+        console.warn("Supabase admin client not initialized. Falling back to default YouTube video.");
+        return fallbackVideoId;
+    }
+
+    try {
+        const { data, error } = await supabaseAdmin
+            .from('site_content')
+            .select('value')
+            .eq('key', 'youtube_video_id')
+            .single();
+
+        if (error) {
+            console.error("Error fetching YouTube video ID:", error.message);
+            return fallbackVideoId;
+        }
+
+        return data?.value || fallbackVideoId;
+    } catch (e) {
+        console.error('An unexpected error occurred while fetching YouTube video ID:', e);
+        return fallbackVideoId;
+    }
+}
+
+
+export default async function Home() {
+  const videoId = await getYouTubeVideoId();
+
   return (
     <main>
       <Hero />
@@ -26,7 +57,7 @@ export default function Home() {
                 Learn more about our mission and how we're making a difference in local communities across India.
             </p>
             <div className="mt-10">
-                <YouTubePlayer videoId="dQw4w9WgXcQ" />
+                <YouTubePlayer videoId={videoId} />
             </div>
         </div>
       </section>
