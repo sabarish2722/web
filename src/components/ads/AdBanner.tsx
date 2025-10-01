@@ -24,7 +24,7 @@ const AdBanner = () => {
                 className="adsbygoogle"
                 style={{ display: 'block' }}
                 data-ad-client="ca-pub-3223413296044209"
-                data-ad-slot="YOUR_AD_SLOT_ID"       // Replace with your Ad Slot ID
+                data-ad-slot="5191134658"
                 data-ad-format="auto"
                 data-full-width-responsive="true"
             ></ins>
