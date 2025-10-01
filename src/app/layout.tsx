@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import Footer from "@/components/landing/Footer"; 
 import Header from "@/components/landing/Header"; 
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "macs11 - Your City, Simplified",
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 };
 
 const GA_MEASUREMENT_ID = "G-BY186VXK57";
+const ADSENSE_PUBLISHER_ID = "ca-pub-YOUR_PUBLISHER_ID"; // Replace with your AdSense Publisher ID
 
 export default function RootLayout({
   children,
@@ -38,6 +40,12 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap"
           rel="stylesheet"
+        />
+        <Script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
